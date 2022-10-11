@@ -11,13 +11,29 @@ import ruleCorpus from './providers/corpus';
 import AmqpCacoon from 'amqp-cacoon';
 import { MongoClient, Db } from 'mongodb';
 
+/**
+ * setup
+ * Setup the rules engine application
+ * do this by..
+ * 1. Setup mongodb
+ * 2. Setup udp input provider to listen for show control messages
+ * 3. Setup the amqp input + output provider
+ * 4. Setup the rule harvester by connecting the providers to it
+ * 5. Start the rule harvester
+ **/
 export const setup = async ({ logger }: { logger: ILogger }) => {
+  // 1. Setup mongodb
   let { mongoDatabase } = await setupMongoDB({ logger });
-  // Setup the UDP Input provider
-  let { coreUdpInput } = await setupUdp({logger});
-  // Setup AMQP
-  let { amqpCacoon, coreInputAmqpProvider, coreOutputAmqpProvider } =
-    await setupAmqp({ logger });
+
+  // 2. Setup udp input provider to listen for show control messages
+  let { coreUdpInput } = await setupUdp({ logger });
+
+  // 3. Setup the amqp input + output provider
+  let { coreInputAmqpProvider, coreOutputAmqpProvider } = await setupAmqp({
+    logger,
+  });
+
+  // 4. Setup the rule harvester by connecting the providers to it
   let rulesHarvester = new RulesHarvester({
     providers: {
       inputs: [coreInputAmqpProvider, coreUdpInput],
@@ -27,15 +43,15 @@ export const setup = async ({ logger }: { logger: ILogger }) => {
       logger: logger,
     },
     extraContext: {
-      amqpCacoon,
       mongoDatabase,
     },
   });
 
+  // 5. Start the rule harvester
   rulesHarvester.start();
 };
 
-// Setup MongoDB Connection
+// Setup UDP Server input provider
 async function setupUdp({ logger }: { logger: ILogger }) {
   logger.info('Setup UDP Input Provider');
   const coreUdpInput = new CoreInputUdp([conf.server.port], undefined, {});
@@ -70,6 +86,7 @@ async function setupMongoDB({ logger }: { logger: ILogger }) {
   return { mongoDatabase };
 }
 
+// Setup amqp input/output providers
 async function setupAmqp({ logger }: { logger: ILogger }) {
   logger.info('Connecting to AMQP');
   // Since the AMQP Input requires an AMQP Cacoon object, let's start by creating that.
