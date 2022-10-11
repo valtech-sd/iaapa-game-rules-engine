@@ -1,0 +1,86 @@
+version: '3.9'
+services:
+  # This is a MongoDB instance that will hold the local data.
+  db:
+    image: mongo:6.0.2
+    hostname: db
+    container_name: db
+    environment:
+      # MONGO_INITDB_ROOT_USERNAME: iaapa
+      # MONGO_INITDB_ROOT_PASSWORD: partyForever2022
+      MONGO_INITDB_DATABASE: 'iaapa'
+    ports:
+      - '27017:27017'
+    volumes:
+    - './mongodb:/data/db'
+
+  rabbitmq:
+    environment:
+      PROVISIONING_CONTAINER_PATH: /tmp/provisioning
+    build:
+      context: rabbitmq/
+      args:
+        RMQ_VERSION_TAG: 3.9.4-management
+    hostname: rabbitmq
+    container_name: rabbitmq
+    ports:
+      #- '4369:4369'   # RMQ EMPD Peer Discovery
+      - '5672:5672'   # AMQP
+      - '5671:5671'   # AMQPS (AMQP over TLS)
+      - '1883:1883'   # MQTT
+      - '8883:8883'   # MQTT over TLS
+      - '15675:15675' # Web MQTT (MQTT over WebSockets)
+      - '15673:15673' # Web MQTT (MQTT over WebSockets) over TLS
+      - '25672:25672' # Used for inter-node and CLI tools communication
+      - '15672:15672' # Management
+      - '15674:15674' # Web Stomp
+    volumes:
+      - type: bind
+        source: 'rabbitmq/config/enabled_plugins.erl'
+        target: /etc/rabbitmq/enabled_plugins
+        read_only: true
+      - type: bind
+        source: 'rabbitmq/config/rabbitmq.conf'
+        target: /etc/rabbitmq/rabbitmq.conf
+        read_only: true
+      - type: bind
+        source: 'rabbitmq/provisioning'
+        target: /tmp/provisioning
+        read_only: true
+      - type: bind
+        source: 'rabbitmq/secrets'
+        target: /tmp/secrets
+
+  rules-engine:
+    build:
+      context: rules-engine/
+    hostname: rules-engine
+    container_name: rules-engine
+    user: 'node'
+    restart: always
+    working_dir: /home/node/app
+    ports:
+      - '3333:3333'
+    environment:
+      - LOG_STYLE=colored
+      - LOG_LEVEL=trace
+      - NODE_ENV=dev
+      - RMQ_HOST=rabbitmq
+      - RMQ_PROTOCOL=amqp
+      - UDP_PORT=3333
+        #- MONGODB_USERNAME=iaapa
+        #- MONGODB_PASSWORD=partyForever2022
+      - MONGODB_HOST=db
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=iaapa
+    command: "/scripts/wait-for-rabbitmq.sh rabbitmq yarn start:watch"
+    volumes:
+      - type: bind
+        source: './rules-engine'
+        target: /home/node/app
+      - type: bind
+        source: './docker/scripts'
+        target: /scripts
+      - type: bind
+        source: './rabbitmq/secrets'
+        target: /tmp/secrets
