@@ -1,4 +1,4 @@
-# IAAP 2022 Docker Stack
+# IAAPA 2022 Docker Stack
 
 This is the Docker stack for a game created by Valtech for IAAPA 2022. 
 
@@ -9,8 +9,9 @@ This is the Docker stack for a game created by Valtech for IAAPA 2022.
 
 ## Software Requirements
 1. [Docker and Docker Compose](https://www.docker.com/products/docker-desktop/)
-1. [Yarn](https://yarnpkg.com/getting-started/install). 
-  NOTE for Mac: If you installed Node via NVM and NVM via HomeBrew, `corepack` may not be installed for you automatically.  [You would then need to install it first before enabling it.](https://stackoverflow.com/a/70094249/3375398)
+1. [Yarn](https://yarnpkg.com/getting-started/install)
+
+   > ℹ️**INFO:** For Mac, if you installed Node via NVM and NVM via HomeBrew, `corepack` may not be installed for you automatically.  [You would then need to install it first before enabling it.](https://stackoverflow.com/a/70094249/3375398)
 
 ## How To Pull the Project
 1. Download all needed tools from listed software requirements above.
