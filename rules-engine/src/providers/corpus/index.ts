@@ -54,22 +54,8 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
                 '^playerRfid': 'message.data.playerRfid',
                 outputKey: 'playerInfo',
               },
-              'logFacts',
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:get-player-info'],
-              },
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:gamestate-add-plarer'],
-              },
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:send-gamestate-message'],
-              },
+              'gamestate-add-player',
+              'publish-gamestate-message',
             ],
           },
           // Handle Clear Slot Message

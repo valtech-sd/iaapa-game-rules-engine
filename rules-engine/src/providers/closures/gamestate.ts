@@ -35,7 +35,7 @@ export default [
         gameStatus: 'loading',
         gameStartTimestamp: null,
         gameLengthMs: null,
-        location: [],
+        locations: [],
       },
     },
   ]),
@@ -45,6 +45,30 @@ export default [
       collection: conf.mongodb.collections.GameState,
       '^_id': 'message.data.gameId',
       outputKey: 'gameStateDoc',
+    },
+  ]),
+  closureGenerator('gamestate-add-player', [
+    'gamestate-get', // Stores states in facts.gameStateDoc
+    {
+      closure: 'push',
+      key: 'gameStateDoc.locations',
+      '^value': {
+        '^name': 'playerInfo.name',
+        '^location': 'message.data.locationNumber',
+        score: 0,
+        '^playerId': 'playerInfo._id',
+      },
+    },
+    {
+      closure: 'mongodb-save',
+      collection: conf.mongodb.collections.GameState,
+      '^document': {
+        '^_id': 'message.data.gameId',
+        gameStatus: 'loading',
+        gameStartTimestamp: null,
+        gameLengthMs: null,
+        location: [],
+      },
     },
   ]),
 ];
