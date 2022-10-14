@@ -11,12 +11,17 @@
     "data": {
       "type": "object",
       "properties": {
+        "gameId": {
+          "type": "string",
+          "title": "gameId"
+        },
         "mode": {
           "type": "string",
           "title": "mode"
         }
       },
       "required": [
+        "gameId",
         "mode"
       ],
       "title": "data"

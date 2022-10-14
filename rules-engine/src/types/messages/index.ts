@@ -18,6 +18,7 @@ export namespace messages {
   export interface MessageGameMode extends MessageHeader {
     type: 'gamemode';
     data: {
+      gameId: string;
       mode: string;
     };
   }
