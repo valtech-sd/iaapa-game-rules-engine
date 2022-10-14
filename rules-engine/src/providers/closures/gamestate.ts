@@ -62,13 +62,7 @@ export default [
     {
       closure: 'mongodb-save',
       collection: conf.mongodb.collections.GameState,
-      '^document': {
-        '^_id': 'message.data.gameId',
-        gameStatus: 'loading',
-        gameStartTimestamp: null,
-        gameLengthMs: null,
-        location: [],
-      },
+      '^document': 'gameStateDoc',
     },
   ]),
 ];
