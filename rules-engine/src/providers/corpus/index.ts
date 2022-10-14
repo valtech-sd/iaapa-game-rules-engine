@@ -62,6 +62,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           {
             when: ['is-valid-clearslot-message'],
             then: [
+              // TODO
               {
                 closure: 'log',
                 level: 'info',
@@ -88,6 +89,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           {
             when: ['is-valid-playeractions-message'],
             then: [
+              // TODO
               {
                 closure: 'log',
                 level: 'info',
@@ -111,6 +113,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             then: [
               'gamestate-end',
               'publish-gamestate-message',
+              // TODO
               {
                 closure: 'log',
                 level: 'info',
