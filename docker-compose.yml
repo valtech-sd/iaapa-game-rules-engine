@@ -60,7 +60,7 @@ services:
     restart: always
     working_dir: /home/node/app
     ports:
-      - '3333:3333'
+      - '3333:3333/udp'
     environment:
       - LOG_STYLE=colored
       - LOG_LEVEL=trace

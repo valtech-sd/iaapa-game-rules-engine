@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "title": "type"
+    },
+    "timestamp": {
+      "type": "string",
+      "title": "timestamp"
+    },
+    "data": {
+      "title": "data"
+    }
+  },
+  "required": [
+    "data",
+    "timestamp",
+    "type"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

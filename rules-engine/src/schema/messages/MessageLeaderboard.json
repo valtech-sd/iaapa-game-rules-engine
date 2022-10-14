@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "leaderboard"
+      ],
+      "title": "type"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "leaderboardType": {
+          "type": "string",
+          "title": "leaderboardType"
+        },
+        "leaderboard": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "rank": {
+                "type": "number",
+                "title": "rank"
+              },
+              "score": {
+                "type": "number",
+                "title": "score"
+              }
+            },
+            "required": [
+              "rank",
+              "score"
+            ]
+          },
+          "title": "leaderboard"
+        }
+      },
+      "required": [
+        "leaderboard",
+        "leaderboardType"
+      ],
+      "title": "data"
+    },
+    "timestamp": {
+      "type": "string",
+      "title": "timestamp"
+    }
+  },
+  "required": [
+    "data",
+    "timestamp",
+    "type"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

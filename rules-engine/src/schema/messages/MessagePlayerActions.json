@@ -1,0 +1,77 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "playeractions"
+      ],
+      "title": "type"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "gameId": {
+          "type": "string",
+          "title": "gameId"
+        },
+        "scoringPlayerRfid": {
+          "type": "string",
+          "title": "scoringPlayerRfid"
+        },
+        "turnNumber": {
+          "type": "number",
+          "title": "turnNumber"
+        },
+        "turnLengthMs": {
+          "type": "number",
+          "title": "turnLengthMs"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "title": "type"
+              },
+              "playerRfid": {
+                "type": "string",
+                "title": "playerRfid"
+              },
+              "count": {
+                "type": "number",
+                "title": "count"
+              }
+            },
+            "required": [
+              "count",
+              "playerRfid",
+              "type"
+            ]
+          },
+          "title": "actions"
+        }
+      },
+      "required": [
+        "actions",
+        "gameId",
+        "scoringPlayerRfid",
+        "turnLengthMs",
+        "turnNumber"
+      ],
+      "title": "data"
+    },
+    "timestamp": {
+      "type": "string",
+      "title": "timestamp"
+    }
+  },
+  "required": [
+    "data",
+    "timestamp",
+    "type"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

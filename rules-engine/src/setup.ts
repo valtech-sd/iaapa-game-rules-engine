@@ -54,7 +54,7 @@ export const setup = async ({ logger }: { logger: ILogger }) => {
 // Setup UDP Server input provider
 async function setupUdp({ logger }: { logger: ILogger }) {
   logger.info('Setup UDP Input Provider');
-  const coreUdpInput = new CoreInputUdp([conf.server.port], undefined, {});
+  const coreUdpInput = new CoreInputUdp([conf.server.port], logger, {});
   return { coreUdpInput };
 }
 
@@ -62,6 +62,7 @@ async function setupUdp({ logger }: { logger: ILogger }) {
 async function setupMongoDB({ logger }: { logger: ILogger }) {
   let mongoDatabase: Db;
   try {
+    // Build connection string
     let authString =
       conf.mongodb.username && conf.mongodb.password
         ? `${conf.mongodb.username}:${encodeURIComponent(
@@ -71,12 +72,46 @@ async function setupMongoDB({ logger }: { logger: ILogger }) {
     let clientString = `mongodb://${authString}${conf.mongodb.host}:${conf.mongodb.port}/${conf.mongodb.database}`;
 
     logger.info('MongoDB: Setup started', clientString);
+    // Create MongoDB client
     let client = new MongoClient(clientString, {
       maxPoolSize: conf.mongodb.poolSize,
       minPoolSize: Math.min(5, conf.mongodb.poolSize),
     });
+    // Connect Client
     await client.connect();
+    // Get database
     mongoDatabase = client.db();
+    // Initiate databse
+    // Setup leaderboard config
+    await mongoDatabase
+      .collection(conf.mongodb.collections.Config)
+      .findOneAndUpdate(
+        { _id: 'leaderboardupdate' },
+        {
+          $setOnInsert: {
+            _id: 'leaderboardupdate',
+            value: true,
+          },
+        },
+        {
+          upsert: true,
+        }
+      );
+    // Set initial ShowMode config ( Start in idle mode )
+    await mongoDatabase
+      .collection(conf.mongodb.collections.Config)
+      .findOneAndUpdate(
+        { _id: 'showmode' },
+        {
+          $setOnInsert: {
+            _id: 'showmode',
+            value: 'idle',
+          },
+        },
+        {
+          upsert: true,
+        }
+      );
     logger.info('MongoDB: Connected to MongoDB');
     logger.info('MongoDB: Setup Done');
   } catch (e) {
@@ -122,7 +157,11 @@ async function setupAmqp({ logger }: { logger: ILogger }) {
           autoDelete: true,
           durable: false,
         });
-        await channel.assertQueue(conf.amqp.unityQueue, {
+        await channel.assertQueue(conf.amqp.gamestateQueue, {
+          autoDelete: true,
+          durable: false,
+        });
+        await channel.assertQueue(conf.amqp.leaderboardQueue, {
           autoDelete: true,
           durable: false,
         });
@@ -135,12 +174,17 @@ async function setupAmqp({ logger }: { logger: ILogger }) {
         await channel.bindQueue(
           conf.amqp.rulesEngineQueue,
           conf.amqp.mainExchange,
-          '*'
+          '#'
         );
         await channel.bindQueue(
-          conf.amqp.unityQueue,
+          conf.amqp.gamestateQueue,
           conf.amqp.mainExchange,
-          '*'
+          '#.gamestate'
+        );
+        await channel.bindQueue(
+          conf.amqp.leaderboardQueue,
+          conf.amqp.mainExchange,
+          '#.leaderboard'
         );
       } catch (ex) {
         logger.error(`ERROR: Setup - AmqpCacoon.onChannelConnect`, ex);

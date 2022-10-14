@@ -12,7 +12,8 @@ export default {
     amqp_opts: {},
     mainExchange: 'ex.iaapa-topic',
     rulesEngineQueue: 'qu.iaapa-rules-engine',
-    unityQueue: 'qu.iaapa-unity',
+    gamestateQueue: 'qu.iaapa-unity-gamestate',
+    leaderboardQueue: 'qu.iaapa-unity-leaderboard',
   },
   mongodb: {
     host: process.env.MONGODB_HOST || 'localhost',
@@ -21,5 +22,11 @@ export default {
     username: process.env.MONGODB_USERNAME || '',
     password: process.env.MONGODB_PASSWORD || '',
     poolSize: 5,
+    collections: {
+      GameState: 'GameState',
+      GameActivity: 'GameActivity',
+      Players: 'Players',
+      Config: 'Config',
+    },
   },
 };

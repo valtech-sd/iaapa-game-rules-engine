@@ -21,6 +21,6 @@ ENV NODE_ENV production
 # Build application
 RUN npm run build
 # Expose port
-EXPOSE 4000
+EXPOSE 3333/udp
 # Run default node app on startup
 CMD [ "npm","run","start"]
