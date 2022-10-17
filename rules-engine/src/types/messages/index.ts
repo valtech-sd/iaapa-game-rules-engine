@@ -28,7 +28,7 @@ export namespace messages {
     data: {
       gameId: string;
       gameStartTimestamp: string;
-      gameLengthMs: string;
+      gameLengthMs: number;
     };
   }
 
@@ -94,11 +94,45 @@ export namespace messages {
     type: 'gamestate';
     data: {
       gameId: string;
-      gameMode: string;
-      leaderboard: Array<{
-        rank: number;
+      gameStatus: string;
+      gameStartTimestamp: string;
+      locations: Array<{
+        location: number;
         score: number;
+        layerName: number;
+        playerId: number;
       }>;
     };
   }
+  
+  export interface MessageTurnStartRulesEngine extends MessageHeader {
+    type: 'turnstart';
+    data: {
+      gameId: string;
+      playerRfid: string;
+      turnNumber: number;
+      turnLengthMs: number;
+    };
+  }
+
+  export interface MessageTurnStartShowControl extends MessageHeader {
+    type: 'turnstart';
+    data: {
+      gameId: string;
+      playerRfid: string;
+      turnNumber: number;
+      turnLengthMs: number;
+    };
+  }
+
+  export type MessageAllTypeUnion =
+    | MessageGameState
+    | MessageLeaderboard
+    | MessageClearSlot
+    | MessagePlayerActions
+    | MessagePlayerCheckin
+    | MessageGameReset
+    | MessageGameStart
+    | MessageEndGame
+    | MessageGameMode;
 }

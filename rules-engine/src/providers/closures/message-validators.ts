@@ -10,6 +10,7 @@ import MessageGameStart from '../../schema/messages/MessageGameStart.json';
 import MessageHeader from '../../schema/messages/MessageHeader.json';
 import MessagePlayerActions from '../../schema/messages/MessagePlayerActions.json';
 import MessagePlayerCheckin from '../../schema/messages/MessagePlayerCheckin.json';
+import MessageTurnStartShowControl from '../../schema/messages/MessageTurnStartShowControl.json';
 
 const closures: IClosure[] = [
   /**
@@ -109,6 +110,16 @@ const closures: IClosure[] = [
       closure: 'is-schema-valid',
       '^data': 'message',
       schema: MessagePlayerCheckin,
+    },
+  ]),
+  /**
+   * Is Valid Turn Start Message (From show control)
+   */
+  closureGenerator('is-valid-turnstart-message', [
+    {
+      closure: 'is-schema-valid',
+      '^data': 'message',
+      schema: MessageTurnStartShowControl,
     },
   ]),
 ];

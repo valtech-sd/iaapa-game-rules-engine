@@ -1,4 +1,5 @@
 import { ICorpusRuleGroup } from 'rule-harvester';
+import conf from '../..//conf';
 
 export const ruleCorpus: ICorpusRuleGroup[] = [
   // Parse string content to JSON requets and move to facts.message
@@ -46,17 +47,10 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             then: ['gamestate-reset-game', 'publish-gamestate-message'],
           },
           // Handle Player Checkin message
+          // TODO Create temporary player name if player does not exist
           {
             when: ['is-valid-playercheckin-message'],
-            then: [
-              {
-                closure: 'players-get-from-rfid',
-                '^playerRfid': 'message.data.playerRfid',
-                outputKey: 'playerInfo',
-              },
-              'gamestate-add-player',
-              'publish-gamestate-message',
-            ],
+            then: ['gamestate-add-player', 'publish-gamestate-message'],
           },
           // Handle Clear Slot Message
           {
@@ -89,22 +83,9 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           {
             when: ['is-valid-playeractions-message'],
             then: [
-              // TODO
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:gamestate-apply-actions'],
-              },
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:gameactivity-insert-player-actions'],
-              },
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:send-gamestate-message'],
-              },
+              'gamestate-apply-actions',
+              'gameactivity-insert-player-actions',
+              'publish-gamestate-message',
             ],
           },
           // Handle End Game Message
@@ -126,8 +107,34 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
               },
             ],
           },
+          // Handle Turn Start message
+          // TODO Test message
+          {
+            when: ['is-valid-turnstart-message'],
+            then: [
+              // Get player info from playerRfid
+              {
+                closure: 'player-get-from-rfid',
+                '^playerRfid': 'message.data.playerRfid',
+                outputKey: 'playerInfo',
+              },
+              // Publish turnstart message
+              {
+                closure: 'publish-amqp-message',
+                type: 'turnstart',
+                exchange: conf.amqp.mainExchange,
+                '^data': {
+                  '^gameId': 'message.gameId',
+                  '^playerId': 'message.playerInfo._id',
+                  '^turnNumber': 'message.turnNumber',
+                  '^turnLengthMs': 'message.turnLengthMs',
+                },
+              },
+            ],
+          },
         ],
       },
+      'logFacts',
     ],
   },
   {

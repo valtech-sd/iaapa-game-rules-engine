@@ -8,7 +8,7 @@ export default [
   closureGenerator(
     'mongodb-get',
     async (facts: AppFacts, context: AppContext) => {
-      context.logger.trace(context.parameters);
+      context.logger.trace('START: closure:mongodb-get');
       if (!context.parameters._id && !context.parameters.filter) {
         context.logger.error(
           'ERROR: closure:mongodb-get: _id or filter parameter not passed in'
@@ -34,12 +34,15 @@ export default [
 
       _.set(facts, context.parameters.outputKey || 'document', document);
 
+      context.logger.trace('END: closure:mongodb-get');
+
       return facts;
     }
   ),
   closureGenerator(
     'mongodb-save',
     async (facts: AppFacts, context: AppContext) => {
+      context.logger.trace('START: closure:mongodb-save');
       let doc = context.parameters.document;
       if (!doc) {
         context.logger.error(
@@ -69,6 +72,7 @@ export default [
             upsert: true,
           }
         );
+      context.logger.trace('END: closure:mongodb-save');
       return facts;
     }
   ),

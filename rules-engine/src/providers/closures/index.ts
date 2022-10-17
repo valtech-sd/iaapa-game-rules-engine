@@ -8,6 +8,7 @@ import Players from './players';
 import MessageValidators from './message-validators';
 import GameMode from './gamemode';
 import GameState from './gamestate';
+import GameActivity from './gameactivity';
 
 export default [
   ...CoreClosures,
@@ -20,4 +21,5 @@ export default [
   ...GameMode,
   ...GameState,
   ...Actions,
+  ...GameActivity,
 ];

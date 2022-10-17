@@ -10,9 +10,15 @@ export default [
       outputKey: 'players-get-from-rfid.rfid',
     },
     {
+      closure: 'parameter',
+      parameterKey: 'outputKey',
+      outputKey: 'players-get-from-rfid.outputKey',
+    },
+    {
       closure: 'mongodb-get',
       collection: conf.mongodb.collections.Players,
       '^filter': { '^rfid': 'players-get-from-rfid.rfid' },
+      '^outputKey': 'players-get-from-rfid.outputKey',
     },
   ]),
 ];

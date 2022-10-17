@@ -15,36 +15,51 @@
           "type": "string",
           "title": "gameId"
         },
-        "gameMode": {
+        "gameStatus": {
           "type": "string",
-          "title": "gameMode"
+          "title": "gameStatus"
         },
-        "leaderboard": {
+        "gameStartTimestamp": {
+          "type": "string",
+          "title": "gameStartTimestamp"
+        },
+        "locations": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "rank": {
+              "location": {
                 "type": "number",
-                "title": "rank"
+                "title": "location"
               },
               "score": {
                 "type": "number",
                 "title": "score"
+              },
+              "layerName": {
+                "type": "number",
+                "title": "layerName"
+              },
+              "playerId": {
+                "type": "number",
+                "title": "playerId"
               }
             },
             "required": [
-              "rank",
+              "layerName",
+              "location",
+              "playerId",
               "score"
             ]
           },
-          "title": "leaderboard"
+          "title": "locations"
         }
       },
       "required": [
         "gameId",
-        "gameMode",
-        "leaderboard"
+        "gameStartTimestamp",
+        "gameStatus",
+        "locations"
       ],
       "title": "data"
     },

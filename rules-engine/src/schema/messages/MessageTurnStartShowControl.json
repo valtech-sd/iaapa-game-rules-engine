@@ -4,7 +4,7 @@
     "type": {
       "type": "string",
       "enum": [
-        "gamestart"
+        "gamestate"
       ],
       "title": "type"
     },
@@ -15,19 +15,24 @@
           "type": "string",
           "title": "gameId"
         },
-        "gameStartTimestamp": {
+        "playerRfid": {
           "type": "string",
-          "title": "gameStartTimestamp"
+          "title": "playerRfid"
         },
-        "gameLengthMs": {
+        "turnNumber": {
           "type": "number",
-          "title": "gameLengthMs"
+          "title": "turnNumber"
+        },
+        "turnLengthMs": {
+          "type": "number",
+          "title": "turnLengthMs"
         }
       },
       "required": [
         "gameId",
-        "gameLengthMs",
-        "gameStartTimestamp"
+        "playerRfid",
+        "turnLengthMs",
+        "turnNumber"
       ],
       "title": "data"
     },

@@ -1,0 +1,447 @@
+{
+  "anyOf": [
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gamemode"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            },
+            "mode": {
+              "type": "string",
+              "title": "mode"
+            }
+          },
+          "required": [
+            "gameId",
+            "mode"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gamestart"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            },
+            "gameStartTimestamp": {
+              "type": "string",
+              "title": "gameStartTimestamp"
+            },
+            "gameLengthMs": {
+              "type": "number",
+              "title": "gameLengthMs"
+            }
+          },
+          "required": [
+            "gameId",
+            "gameLengthMs",
+            "gameStartTimestamp"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "playeractions"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            },
+            "scoringPlayerRfid": {
+              "type": "string",
+              "title": "scoringPlayerRfid"
+            },
+            "turnNumber": {
+              "type": "number",
+              "title": "turnNumber"
+            },
+            "turnLengthMs": {
+              "type": "number",
+              "title": "turnLengthMs"
+            },
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "title": "type"
+                  },
+                  "playerRfid": {
+                    "type": "string",
+                    "title": "playerRfid"
+                  },
+                  "count": {
+                    "type": "number",
+                    "title": "count"
+                  }
+                },
+                "required": [
+                  "count",
+                  "playerRfid",
+                  "type"
+                ]
+              },
+              "title": "actions"
+            }
+          },
+          "required": [
+            "actions",
+            "gameId",
+            "scoringPlayerRfid",
+            "turnLengthMs",
+            "turnNumber"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "endgame"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            }
+          },
+          "required": [
+            "gameId"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "playercheckin"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            },
+            "playerRfid": {
+              "type": "string",
+              "title": "playerRfid"
+            },
+            "locationNumber": {
+              "type": "number",
+              "title": "locationNumber"
+            }
+          },
+          "required": [
+            "gameId",
+            "locationNumber",
+            "playerRfid"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gamereset"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            }
+          },
+          "required": [
+            "gameId"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "clearslot"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            },
+            "locationNumber": {
+              "type": "number",
+              "title": "locationNumber"
+            }
+          },
+          "required": [
+            "gameId",
+            "locationNumber"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "leaderboard"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "leaderboardType": {
+              "type": "string",
+              "title": "leaderboardType"
+            },
+            "leaderboard": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "rank": {
+                    "type": "number",
+                    "title": "rank"
+                  },
+                  "score": {
+                    "type": "number",
+                    "title": "score"
+                  }
+                },
+                "required": [
+                  "rank",
+                  "score"
+                ]
+              },
+              "title": "leaderboard"
+            }
+          },
+          "required": [
+            "leaderboard",
+            "leaderboardType"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gamestate"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            },
+            "gameStatus": {
+              "type": "string",
+              "title": "gameStatus"
+            },
+            "gameStartTimestamp": {
+              "type": "string",
+              "title": "gameStartTimestamp"
+            },
+            "locations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "location": {
+                    "type": "number",
+                    "title": "location"
+                  },
+                  "score": {
+                    "type": "number",
+                    "title": "score"
+                  },
+                  "layerName": {
+                    "type": "number",
+                    "title": "layerName"
+                  },
+                  "playerId": {
+                    "type": "number",
+                    "title": "playerId"
+                  }
+                },
+                "required": [
+                  "layerName",
+                  "location",
+                  "playerId",
+                  "score"
+                ]
+              },
+              "title": "locations"
+            }
+          },
+          "required": [
+            "gameId",
+            "gameStartTimestamp",
+            "gameStatus",
+            "locations"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": "string",
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    }
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

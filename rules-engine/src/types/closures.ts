@@ -12,7 +12,7 @@ export interface AppFacts {
   udpRequest?: ICoreUdpRequest; // Incoming udp requests are stored here
   amqpMessage?: ICoreAmqpMessage; // Incoming amqp messages are stored here
   amqpPublishAction: Array<ICoreAmqpPublishAction>; // We push onto this array to publish amqp messages
-  message: messages.MessageGeneric; // Incoming messages / requests are parsed into this field
+  message: messages.MessageAllTypeUnion; // Incoming messages / requests are parsed into this field
   [key: string]: any;
 }
 
