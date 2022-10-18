@@ -26,6 +26,7 @@ const closures: IClosure[] = [
         context.parameters.outputKey || context.parameters.parameterKey,
         value
       );
+      console.log('PARAMS', context.parameters, value);
       return facts;
     },
     { require: ['parameterKey', 'outputKey'] }

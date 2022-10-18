@@ -41,6 +41,24 @@ const closures: IClosure[] = [
       value2: 'run',
     },
   ]),
+  /**
+   * all-fields-falsy - Returns true if all parameter fields are falsy - null, undefeind, "", false
+   * example {closure: 'all-fields-falsy', fields: ['something.name']} - If something.name is falsy
+   * @param any number of params
+   * @return boolean
+   **/
+  closureGenerator(
+    'all-fields-falsy',
+    (facts: any, context: any) => {
+      let ret = true;
+      for (let field of context.parameters.fields) {
+        ret = !_.get(facts, field);
+        if (!ret) break;
+      }
+      return ret;
+    },
+    { required: ['fields'] }
+  ),
 ];
 
 export default closures;

@@ -28,6 +28,9 @@ export default [
       let filter: Filter<any> = context.parameters._id
         ? { _id: context.parameters._id }
         : context.parameters.filter;
+
+      context.logger.trace('QUERY: closure:mongodb-get', { findOne: filter });
+
       let document = await context.mongoDatabase
         .collection(context.parameters.collection)
         .findOne(filter);
