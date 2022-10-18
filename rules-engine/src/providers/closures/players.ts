@@ -8,11 +8,13 @@ export default [
       closure: 'parameter',
       parameterKey: 'playerRfid',
       outputKey: 'players-get-from-rfid.rfid',
+      '^defaultValue': 'message.data.playerRfid',
     },
     {
       closure: 'parameter',
       parameterKey: 'outputKey',
       outputKey: 'players-get-from-rfid.outputKey',
+      defaultValue: 'playerInfo',
     },
     {
       closure: 'mongodb-get',

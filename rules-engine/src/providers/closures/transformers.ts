@@ -7,21 +7,28 @@ const closures: IClosure[] = [
    * parmaeter
    * Pulls a parmeter into the facts object for use elsewhere
    *
-   * @param context.parameters.parameterKey - 
-   * @param context.parameters.outputKey - Where to store parameter value in facts - Defaults to parameterKey
+   * @param context.parameters.parameterKey - field that is part of existing parameters to pull into the facts object
+   * @param context.parameters.outputKey - Optional, Where to store parameter value in facts - Defaults to parameterKey
+   * @param context.parameters.defaultValue - Optional default value if the parameter was undefined 
 
    * @return facts object with {[outputKey]: context.parameter[parameterKey]} merged into fact object
    */
   closureGenerator(
     'parameter',
     async (facts: AppFacts, context: AppContext) => {
+      // Get value from parameters
+      let value = _.get(context.parameters, context.parameters.parameterKey);
+      // Default the value
+      value = value === undefined ? context.parameters.defaultValue : value;
+      // Set the value
       _.set(
         facts,
         context.parameters.outputKey || context.parameters.parameterKey,
-        _.get(context.parameters, context.parameters.parameterKey)
+        value
       );
       return facts;
-    }
+    },
+    { require: ['parameterKey', 'outputKey'] }
   ),
   /**
    * parse-json

@@ -114,7 +114,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             then: [
               // Get player info from playerRfid
               {
-                closure: 'player-get-from-rfid',
+                closure: 'players-get-from-rfid',
                 '^playerRfid': 'message.data.playerRfid',
                 outputKey: 'playerInfo',
               },
