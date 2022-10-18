@@ -108,7 +108,6 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             ],
           },
           // Handle Turn Start message
-          // TODO Test message
           {
             when: ['is-valid-turnstart-message'],
             then: [
