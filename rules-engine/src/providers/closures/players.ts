@@ -15,8 +15,14 @@ export default [
     {
       closure: 'parameter',
       parameterKey: 'playerRfid',
-      outputKey: 'players-get-from-rfid.rfid',
+      outputParameterTo: 'players-get-from-rfid.rfid',
       '^defaultValue': 'message.data.playerRfid',
+    },
+    {
+      closure: 'parameter',
+      parameterKey: 'outputKey',
+      outputParameterTo: 'players-get-from-rfid.outputKey',
+      defaultValue: 'playerInfo',
     },
     {
       closure: 'mongodb-get',
@@ -49,7 +55,7 @@ export default [
     },
     {
       closure: 'set',
-      key: 'playerInfo',
+      '^key': 'players-get-from-rfid.outputKey',
       '^value': 'players-get-from-rfid.playerInfo',
     },
   ]),

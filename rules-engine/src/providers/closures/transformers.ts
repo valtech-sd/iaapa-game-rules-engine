@@ -8,10 +8,10 @@ const closures: IClosure[] = [
    * Pulls a parmeter into the facts object for use elsewhere
    *
    * @param context.parameters.parameterKey - field that is part of existing parameters to pull into the facts object
-   * @param context.parameters.outputKey - Optional, Where to store parameter value in facts - Defaults to parameterKey
+   * @param context.parameters.outputParameterTo - Optional, Where to store parameter value in facts - Defaults to parameterKey
    * @param context.parameters.defaultValue - Optional default value if the parameter was undefined 
 
-   * @return facts object with {[outputKey]: context.parameter[parameterKey]} merged into fact object
+   * @return facts object with {[outputParameterTo]: context.parameter[parameterKey]} merged into fact object
    */
   closureGenerator(
     'parameter',
@@ -23,13 +23,12 @@ const closures: IClosure[] = [
       // Set the value
       _.set(
         facts,
-        context.parameters.outputKey || context.parameters.parameterKey,
+        context.parameters.outputParameterTo || context.parameters.parameterKey,
         value
       );
-      console.log('PARAMS', context.parameters, value);
       return facts;
     },
-    { require: ['parameterKey', 'outputKey'] }
+    { require: ['parameterKey', 'outputParameterTo'] }
   ),
   /**
    * parse-json

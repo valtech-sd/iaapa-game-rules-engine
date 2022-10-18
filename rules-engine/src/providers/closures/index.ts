@@ -12,6 +12,7 @@ import GameActivity from './gameactivity';
 
 export default [
   ...CoreClosures,
+  ...Actions,
   ...Conditions,
   ...Transformers,
   ...MongoDB,
@@ -20,6 +21,5 @@ export default [
   ...MessageValidators,
   ...GameMode,
   ...GameState,
-  ...Actions,
   ...GameActivity,
 ];

@@ -1,7 +1,7 @@
 import { AppFacts, AppContext } from '../../types';
 import { closureGenerator, ICoreAmqpPublishAction } from 'rule-harvester';
 import { v4 as uuidv4 } from 'uuid';
-import conf from '../../conf';
+// import conf from '../../conf';
 
 export default [
   closureGenerator('logFacts', (facts: AppFacts, context: AppContext) => {
@@ -69,45 +69,15 @@ export default [
     },
     {}
   ),
-  closureGenerator('publish-gamestate-message', [
-    { closure: 'config-get', key: 'showmode', outputKey: 'showmode' },
-    {
-      when: { closure: 'equal', '^value1': 'showmode', value2: 'idle' },
-      then: [
-        {
-          closure: 'publish-amqp-message',
-          exchange: conf.amqp.mainExchange,
-          routingKey: 'game.state.gamestate',
-          type: 'gamestate',
-          data: {
-            gameStatus: 'idle',
-          },
-        },
-      ],
+  /*
+   * Suppress amqp output provider error on blank message
+   */
+  closureGenerator(
+    'amqp-output-supress-no-message-error',
+    async function (facts: AppFacts, _context: AppContext) {
+      facts.amqpPublishAction ||= [];
+      return facts;
     },
-    {
-      when: {
-        closure: 'not',
-        notClosure: 'equal',
-        '^value1': 'showmode',
-        value2: 'idle',
-      },
-      then: [
-        'gamestate-get',
-        {
-          closure: 'publish-amqp-message',
-          exchange: conf.amqp.mainExchange,
-          routingKey: 'game.state.gamestate',
-          type: 'gamestate',
-          '^data': {
-            '^gameId': 'gameStateDoc._id',
-            '^gameStatus': 'gameStateDoc.gameStatus',
-            '^gameStartTimestamp': 'gameStateDoc.gameStartTimestamp',
-            '^gameLengthMs': 'gameStateDoc.gameLengthMs',
-            '^locations': 'gameStateDoc.locations',
-          },
-        },
-      ],
-    },
-  ]),
+    {}
+  ),
 ];

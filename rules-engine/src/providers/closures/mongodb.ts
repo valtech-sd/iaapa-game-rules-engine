@@ -79,4 +79,37 @@ export default [
       return facts;
     }
   ),
+  closureGenerator(
+    'mongodb-aggregate',
+    async (facts: AppFacts, context: AppContext) => {
+      context.logger.trace('START: closure:mongodb-aggregate');
+      if (!context.parameters.pipeline) {
+        context.logger.error(
+          'ERROR: closure:mongodb-aggregate: _id or filter parameter not passed in'
+        );
+        throw new Error(
+          'closure:mongodb-aggregate: _id or filter parameter not passed in'
+        );
+      }
+      if (!context.parameters.collection) {
+        context.logger.error(
+          'ERROR: closure:mongodb-aggregate: Collection not passed into closure'
+        );
+        throw new Error(
+          'closure:mongodb-aggregate: Collection not passed into closure'
+        );
+      }
+
+      let documents = await context.mongoDatabase
+        .collection(context.parameters.collection)
+        .aggregate(context.parameters.pipeline)
+        .toArray();
+
+      _.set(facts, context.parameters.outputKey || 'aggregate', documents);
+
+      context.logger.trace('END: closure:mongodb-aggregate');
+
+      return facts;
+    }
+  ),
 ];

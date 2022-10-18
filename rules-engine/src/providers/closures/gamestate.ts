@@ -85,10 +85,6 @@ export default [
         let scoringPlayerLocationInfo = facts?.gameStateDoc?.locations?.find(
           (loc: any) => loc.playerRfid === scoringPlayerRfid
         );
-        context.logger.trace(
-          'scoringPlayerLocationInfo',
-          JSON.stringify(scoringPlayerLocationInfo, null, 2)
-        );
         for (let action of playerActionsMessage?.data?.actions) {
           context.logger.trace('action', JSON.stringify(action, null, 2));
           if (action?.type === 'hits') {
@@ -110,6 +106,47 @@ export default [
       closure: 'mongodb-save',
       collection: conf.mongodb.collections.GameState,
       '^document': 'gameStateDoc',
+    },
+  ]),
+  closureGenerator('gamestate-publish-message', [
+    { closure: 'config-get', key: 'showmode', outputKey: 'showmode' },
+    {
+      when: { closure: 'equal', '^value1': 'showmode', value2: 'idle' },
+      then: [
+        {
+          closure: 'publish-amqp-message',
+          exchange: conf.amqp.mainExchange,
+          routingKey: 'game.state.gamestate',
+          type: 'gamestate',
+          data: {
+            gameStatus: 'idle',
+          },
+        },
+      ],
+    },
+    {
+      when: {
+        closure: 'not',
+        notClosure: 'equal',
+        '^value1': 'showmode',
+        value2: 'idle',
+      },
+      then: [
+        'gamestate-get',
+        {
+          closure: 'publish-amqp-message',
+          exchange: conf.amqp.mainExchange,
+          routingKey: 'game.state.gamestate',
+          type: 'gamestate',
+          '^data': {
+            '^gameId': 'gameStateDoc._id',
+            '^gameStatus': 'gameStateDoc.gameStatus',
+            '^gameStartTimestamp': 'gameStateDoc.gameStartTimestamp',
+            '^gameLengthMs': 'gameStateDoc.gameLengthMs',
+            '^locations': 'gameStateDoc.locations',
+          },
+        },
+      ],
     },
   ]),
 ];

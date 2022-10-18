@@ -5,7 +5,11 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
   // Parse string content to JSON requets and move to facts.message
   {
     name: 'Normalize Requests',
-    rules: ['transform-amqp-message', 'transform-udp-message'],
+    rules: [
+      'transform-amqp-message',
+      'transform-udp-message',
+      'amqp-output-supress-no-message-error',
+    ],
   },
   {
     name: 'Message Handler UDP Messages',
@@ -28,7 +32,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
               // If message gamemode = idle -> Switch to Idle mode a
               {
                 when: 'is-gamemode-idle',
-                then: ['gamemode-idle', 'publish-gamestate-message'],
+                then: ['gamemode-idle', 'gamestate-publish-message'],
               },
               // if message gamemode = run -> Switch to Run mode + publish gamestate message
               {
@@ -36,7 +40,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
                 then: [
                   'gamemode-run',
                   'gamestate-reset-game',
-                  'publish-gamestate-message',
+                  'gamestate-publish-message',
                 ],
               },
             ],
@@ -44,13 +48,13 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           // Handle Game Reset Message
           {
             when: ['is-valid-gamereset-message'],
-            then: ['gamestate-reset-game', 'publish-gamestate-message'],
+            then: ['gamestate-reset-game', 'gamestate-publish-message'],
           },
           // Handle Player Checkin message
           // TODO Create temporary player name if player does not exist
           {
             when: ['is-valid-playercheckin-message'],
-            then: ['gamestate-add-player', 'publish-gamestate-message'],
+            then: ['gamestate-add-player', 'gamestate-publish-message'],
           },
           // Handle Clear Slot Message
           {
@@ -77,7 +81,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           // Handle Game Start Message
           {
             when: ['is-valid-gamestart-message'],
-            then: ['gamestate-start', 'publish-gamestate-message'],
+            then: ['gamestate-start', 'gamestate-publish-message'],
           },
           // Handle Player Actions
           {
@@ -85,7 +89,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             then: [
               'gamestate-apply-actions',
               'gameactivity-insert-player-actions',
-              'publish-gamestate-message',
+              'gamestate-publish-message',
             ],
           },
           // Handle End Game Message
@@ -93,7 +97,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             when: ['is-valid-endgame-message'],
             then: [
               'gamestate-end',
-              'publish-gamestate-message',
+              'gamestate-publish-message',
               // TODO
               {
                 closure: 'log',
@@ -115,7 +119,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
               {
                 closure: 'players-get-from-rfid',
                 '^playerRfid': 'message.data.playerRfid',
-                outputKey: 'playerInfo',
+                outputKey: 'playerInfo'
               },
               // Publish turnstart message
               {
