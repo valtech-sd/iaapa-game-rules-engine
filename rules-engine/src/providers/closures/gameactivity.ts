@@ -4,6 +4,14 @@ import _ from 'lodash';
 import conf from '../../conf';
 
 export default [
+  /**
+   * gameactivity-publish-daily-leaderboard
+   * Publish daily leaderboard message
+   * Do this by...
+   * 1. Call publish-amqp-message closure with data from facts
+   *
+   * @param facts.dailyLeaderboard is expected to contain the dailyLeaderboard
+   */
   closureGenerator('gameactivity-publish-daily-leaderboard', [
     {
       closure: 'publish-amqp-message',
@@ -16,6 +24,17 @@ export default [
       },
     },
   ]),
+  /**
+   * gameactivity-get-daily-leaderboard
+   * Get the daily leaderboard from mongodb GameActivity using mongodb aggregate pipeline
+   * Do this by...
+   * 1. Get timestamp range time since epoch at start and end of the day to be able to filter game activity by the current day
+   * 2. Get the gameId parameter  - Default to facts.messagte.data.gameId value
+   * 3. Run mongodb aggregate pipeline to generate leaderboard
+   *
+   * @param facts.gameId - Optional, defaults to the value in facts.message.data.gameId
+   * @return facts - facts.dailyleaderboard contains the daily leaderboard with a list of players and the score and rank
+   */
   closureGenerator('gameactivity-get-daily-leaderboard', [
     'get-timestamp-range-of-today', // Fills timestampRange with todays start and end timestamp
     {
@@ -83,17 +102,31 @@ export default [
       ],
     },
   ]),
+  /**
+   * gameactivity-insert-player-actions
+   * Insert player actions that come from the playeractions message into the GameActivity collection
+   * Do this by...
+   * 1. Get leaderboard update config state
+   * 2. Convert the message tiemstamp for use when we insert the actions
+   * 3. Map the actions in the message to some output. Providing a mapDef
+   * 4. In the Mapfn closure section of the top level map closure, we lookup scoring player info
+   * 5. In the Mapfn closure section of the top level map closure, we lookup action player info
+   * 6. In the Mapfn closure section of the top level map closure, we set the scoring and action player id
+   * 7. In the Mapfn closure section of the top level map closure, we save each action to the database
+   */
   closureGenerator('gameactivity-insert-player-actions', [
+    // 1. Get leaderboard update config state
     {
       closure: 'config-get',
       key: 'leaderboardupdate',
       outputKey: 'leaderboardUpdateEnabled',
     },
+    // 2. Convert the message tiemstamp for use when we insert the actions
     {
       closure: 'convert-timestamp-to-epoch',
       key: 'message.timestamp',
-      outputKey: 'leaderboardUpdateEnabled',
     },
+    // 3. Map the actions in the message to some output. Providing a mapDef
     {
       closure: 'map',
       key: 'message.data.actions',
@@ -110,17 +143,19 @@ export default [
       },
       mapFn: {
         rules: [
+          // 4. In the Mapfn closure section of the top level map closure, we lookup scoring player info
           {
             closure: 'players-get-from-rfid',
             '^playerRfid': 'item.scoringPlayerRfid',
             outputKey: 'scoringPlayerInfo',
           },
+          // 5. In the Mapfn closure section of the top level map closure, we lookup action player info
           {
             closure: 'players-get-from-rfid',
             '^playerRfid': 'item.actionPlayerRfid',
             outputKey: 'actionPlayerInfo',
           },
-          'logFacts',
+          // 6. In the Mapfn closure section of the top level map closure, we set the scoring and action player id
           {
             closure: 'set',
             key: 'item.scoringPlayerId',
@@ -131,7 +166,7 @@ export default [
             key: 'item.actionPlayerId',
             '^value': 'actionPlayerInfo._id',
           },
-          'logFacts',
+          // 7. In the Mapfn closure section of the top level map closure, we save each action to the database
           {
             closure: 'mongodb-save',
             collection: conf.mongodb.collections.GameActivity,

@@ -137,6 +137,11 @@ const closures: IClosure[] = [
     },
     { require: ['key'], closureParameters: ['mapFn'] }
   ),
+  /**
+   * transform-amqp-message
+   * Parse json data from amqp message into the facts.message location.
+   * do nothing if amqpMessage does not exist
+   */
   closureGenerator('transform-amqp-message', [
     {
       closure: 'parse-json',
@@ -144,6 +149,11 @@ const closures: IClosure[] = [
       outputKey: 'message',
     },
   ]),
+  /**
+   * transform-udp-message
+   * Parse json data from udp request into the facts.message location.
+   * do nothing if udpRequest does not exist
+   */
   closureGenerator('transform-udp-message', [
     {
       closure: 'parse-json',
@@ -151,6 +161,13 @@ const closures: IClosure[] = [
       outputKey: 'message',
     },
   ]),
+  /**
+   * set-timestamp-epoch
+   * Set the timestamp for now in a location in facts specified by the "key" parmaeter
+   *
+   * @param parameters.key - location in facts where we should put an epoch timestamp
+   * @return facts - facts[parameters.key] = ms since epoch
+   */
   closureGenerator(
     'set-timestamp-epoch',
     (facts: AppFacts, context: AppContext) => {
@@ -158,6 +175,13 @@ const closures: IClosure[] = [
       return facts;
     }
   ),
+  /**
+   * convert-timestamp-to-epoch
+   * Convert a string timestamp to epoch time
+   *
+   * @param parameters.key - location in facts where we should location the timestamp string
+   * @return facts - facts[parameters.key] = ms since epoch for the timestamp that was a string formated time
+   */
   closureGenerator(
     'convert-timestamp-to-epoch',
     (facts: AppFacts, context: AppContext) => {
@@ -169,17 +193,30 @@ const closures: IClosure[] = [
       return facts;
     }
   ),
+  /**
+   * get-timestamp-range-of-today
+   * Generate a timestamp range for the current day. {start: ms since epoch from start of the day, end: ms since epoch for the end of the current day}
+   * Do this by...
+   * 1. Get start timestamp for the very beginning of the day
+   * 2. Set end timestamp for the very end of the day
+   * 3. Set facts.timestampRange
+   *
+   * @return facts - facts.timestampRange = {start:number, end:number} - {start: "ms since epoch from start of the day", end: "ms since epoch for the end of the current day"}
+   */
   closureGenerator('get-timestamp-range-of-today', (facts: AppFacts) => {
+    // Get start timestamp for the very beginning of the day
     let start = new Date();
-    let end = new Date();
     start.setHours(0);
     start.setMinutes(0);
     start.setSeconds(0);
     start.setMilliseconds(0);
+    // Set end timestamp for the very end of the day
+    let end = new Date();
     end.setHours(23);
     end.setMinutes(59);
     end.setSeconds(59);
     end.setMilliseconds(999);
+    // Set facts
     facts.timestampRange = { start: start.getTime(), end: end.getTime() };
     return facts;
   }),

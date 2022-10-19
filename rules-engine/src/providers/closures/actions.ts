@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default [
   closureGenerator('logFacts', (facts: AppFacts, context: AppContext) => {
-    context.logger.info(facts);
+    context.logger.info("Facts", facts);
     return facts;
   }),
   /**

@@ -96,10 +96,10 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           {
             when: ['is-valid-endgame-message'],
             then: [
-              'gamestate-end',
-              'gamestate-publish-message',
-              'gameactivity-get-daily-leaderboard',
-              'gameactivity-publish-daily-leaderboard',
+              'gamestate-end', // Change game status to "end"
+              'gameactivity-get-daily-leaderboard', // Generate daily leaderboard
+              'gameactivity-publish-daily-leaderboard', // Publish daily leaderboard message
+              'gamestate-publish-message', // Publish game status message
             ],
           },
           // Handle Turn Start message
