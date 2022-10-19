@@ -4,7 +4,20 @@ import _ from 'lodash';
 import conf from '../../conf';
 
 export default [
-  closureGenerator('gameactivity-get-leaderboard', [
+  closureGenerator('gameactivity-publish-daily-leaderboard', [
+    {
+      closure: 'publish-amqp-message',
+      exchange: conf.amqp.mainExchange,
+      routingKey: 'game.state.gamestate',
+      type: 'gamestate',
+      '^data': {
+        leaderboardType: 'daily',
+        '^leaderboard': 'dailyLeaderboard',
+      },
+    },
+  ]),
+  closureGenerator('gameactivity-get-daily-leaderboard', [
+    'get-timestamp-range-of-today', // Fills timestampRange with todays start and end timestamp
     {
       closure: 'parameter',
       parameterKey: 'gameId',
@@ -13,19 +26,61 @@ export default [
     },
     {
       closure: 'mongodb-aggregate',
+      collection: conf.mongodb.collections.GameActivity,
+      outputKey: 'dailyLeaderboard',
       '^pipeline': [
-        { '^$match': { '^gameId': 'gameactivity-get-leaderboard.gameId' } },
+        {
+          '^$match': {
+            loaderboardEnabled: true,
+            actionType: 'hits',
+            // '^timestamp': {
+            //   // Current day rnage
+            //   '^$gte': 'timestampRange.start',
+            //   '^$lte': 'timestampRange.end',
+            // },
+          },
+        },
         {
           $group: {
-            _id: {
-              scoringPlayerRfid: '$scoringPlayerRfid',
-              scorePlayerId: '$scoringPlayerId',
-            },
+            _id: { gameId: '$gameId', scoringPlayerId: '$scoringPlayerId' },
             score: { $sum: '$count' },
           },
         },
+        {
+          $group: {
+            _id: { scoringPlayerId: '$_id.scoringPlayerId' },
+            score: { $max: '$score' },
+          },
+        },
+        {
+          $lookup: {
+            from: conf.mongodb.collections.Players,
+            localField: '_id.scoringPlayerId',
+            foreignField: '_id',
+            as: 'players',
+          },
+        },
+        { $unwind: '$players' },
+        {
+          $project: {
+            playerId: '$_id.scoringPlayerId',
+            score: '$score',
+            _id: 0,
+            playerName: '$players.name',
+          },
+        },
+        {
+          $setWindowFields: {
+            sortBy: { score: -1 },
+            output: {
+              rank: {
+                $rank: {},
+              },
+            },
+          },
+        },
+        { $sort: { rank: 1 } },
       ],
-      // outputKey is implicitly pased through / mongodb-aggregate defaults to aggregate for the ouputKey if not defined
     },
   ]),
   closureGenerator('gameactivity-insert-player-actions', [

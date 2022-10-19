@@ -148,6 +148,7 @@ async function setupAmqp({ logger }: { logger: ILogger }) {
     onChannelConnect: async (channel) => {
       try {
         logger.info('Connected to AMQP');
+        channel.prefetch(1);
         // Notice all of these are done in sequence with AWAIT. This is so that each
         // operation can depend on the prior operation having finished. This is important
         // when binding Queues to Exchanges, for example, because you need both the

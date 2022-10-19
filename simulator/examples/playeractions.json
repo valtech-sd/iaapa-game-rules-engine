@@ -10,6 +10,11 @@
          "type": "hits",
          "playerRfid": "playerRfid_1",
          "count": 10
-      }]
+      },{
+         "type": "hits",
+         "playerRfid": "playerRfid_2",
+         "count": 10
+      }
+      ]
    }
 }

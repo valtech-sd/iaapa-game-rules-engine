@@ -1,0 +1,9 @@
+{
+  "type": "playercheckin",
+  "timestamp": "2022-10-14T14:30:00.034Z",
+  "data": {
+    "gameId": "game123",
+    "playerRfid": "playerRfid_2",
+    "locationNumber": 1
+  }
+}

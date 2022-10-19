@@ -98,17 +98,8 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             then: [
               'gamestate-end',
               'gamestate-publish-message',
-              // TODO
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:leaderboard-get-daily'],
-              },
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:publish-leaderboard-daily'],
-              },
+              'gameactivity-get-daily-leaderboard',
+              'gameactivity-publish-daily-leaderboard',
             ],
           },
           // Handle Turn Start message
@@ -119,7 +110,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
               {
                 closure: 'players-get-from-rfid',
                 '^playerRfid': 'message.data.playerRfid',
-                outputKey: 'playerInfo'
+                outputKey: 'playerInfo',
               },
               // Publish turnstart message
               {

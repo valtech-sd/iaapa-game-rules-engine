@@ -169,6 +169,20 @@ const closures: IClosure[] = [
       return facts;
     }
   ),
+  closureGenerator('get-timestamp-range-of-today', (facts: AppFacts) => {
+    let start = new Date();
+    let end = new Date();
+    start.setHours(0);
+    start.setMinutes(0);
+    start.setSeconds(0);
+    start.setMilliseconds(0);
+    end.setHours(23);
+    end.setMinutes(59);
+    end.setSeconds(59);
+    end.setMilliseconds(999);
+    facts.timestampRange = { start: start.getTime(), end: end.getTime() };
+    return facts;
+  }),
 ];
 
 export default closures;
