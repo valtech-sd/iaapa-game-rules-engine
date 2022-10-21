@@ -8,7 +8,7 @@ const timeout = (time: number) =>
 
 const config = {
   startDelay: 5000,
-  roundLengths: [1],
+  roundLengths: [5, 4, 1],
   gameLengthMs: 60000,
 };
 
