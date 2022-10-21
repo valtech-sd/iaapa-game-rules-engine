@@ -87,6 +87,8 @@ export namespace messages {
       leaderboard: Array<{
         rank: number;
         score: number;
+        playerName: string;
+        playerId: string;
       }>;
     };
   }

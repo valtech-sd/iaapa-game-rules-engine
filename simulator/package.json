@@ -15,7 +15,7 @@
   "scripts": {
     "sim:showcontrol": "ts-node src/simulate-game.ts",
     "sim:unity-gamescreen": "./amqp_conn_env.sh localhost ts-node src/simulate-gamescreen.ts",
-    "sim:unity-leaderboard": "ts-node src/simulate-leaderboard.ts"
+    "sim:unity-leaderboard": "./amqp_conn_env.sh localhost ts-node src/simulate-leaderboard.ts"
   },
   "husky": {
     "hooks": {

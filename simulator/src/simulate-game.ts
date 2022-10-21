@@ -8,7 +8,7 @@ const timeout = (time: number) =>
 
 const config = {
   startDelay: 5000,
-  roundLengths: [5, 4, 1],
+  roundLengths: [1],
   gameLengthMs: 60000,
 };
 
@@ -55,6 +55,7 @@ async function start() {
     })
   );
 
+  await timeout(config.startDelay);
   console.log(`Start Game: Gamemode run`);
   await sendUdpMessage(
     generators.generateGameModeMessage({ gameId, mode: 'run' })
@@ -106,7 +107,7 @@ async function start() {
 
   console.log(`End Game: Gamemode end`);
   await sendUdpMessage(
-    generators.generateGameModeMessage({ gameId, mode: 'run' })
+    generators.generateGameModeMessage({ gameId, mode: 'end' })
   );
 
   await timeout(20000);

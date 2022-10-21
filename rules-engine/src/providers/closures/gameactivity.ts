@@ -16,8 +16,8 @@ export default [
     {
       closure: 'publish-amqp-message',
       exchange: conf.amqp.mainExchange,
-      routingKey: 'game.state.gamestate',
-      type: 'gamestate',
+      routingKey: 'game.state.leaderboard',
+      type: 'leaderboard',
       '^data': {
         leaderboardType: 'daily',
         '^leaderboard': 'dailyLeaderboard',
