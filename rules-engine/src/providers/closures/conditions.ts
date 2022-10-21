@@ -22,26 +22,6 @@ const closures: IClosure[] = [
     },
   ]),
   /**
-   * Is The idle message gamemode idle
-   */
-  closureGenerator('is-gamemode-idle', [
-    {
-      closure: 'equal',
-      '^value1': 'message.data.mode',
-      value2: 'idle',
-    },
-  ]),
-  /**
-   * Is The idle message gamemode run
-   */
-  closureGenerator('is-gamemode-run', [
-    {
-      closure: 'equal',
-      '^value1': 'message.data.mode',
-      value2: 'run',
-    },
-  ]),
-  /**
    * all-fields-falsy - Returns true if all parameter fields are falsy - null, undefeind, "", false
    * example {closure: 'all-fields-falsy', fields: ['something.name']} - If something.name is falsy
    * @param any number of params

@@ -31,57 +31,77 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             then: [
               // If message gamemode = idle -> Switch to Idle mode a
               {
-                when: 'is-gamemode-idle',
+                when: 'is-message-gamemode-idle',
                 then: ['gamemode-idle', 'gamestate-publish-message'],
               },
-              // if message gamemode = run -> Switch to Run mode + publish gamestate message
+              // if message gamemode = load -> Switch to Run mode + publish gamestate message
               {
-                when: 'is-gamemode-run',
+                when: 'is-message-gamemode-load',
                 then: [
-                  'gamemode-run',
+                  'gamemode-load',
                   'gamestate-reset-game',
                   'gamestate-publish-message',
+                ],
+              },
+              // if message gamemode = run
+              {
+                when: 'is-message-gamemode-run',
+                then: [
+                  'gamemode-run',
+                  'gamestate-start',
+                  'gamestate-publish-message',
+                ],
+              },
+              // if message gamemode = end -> End game / Get and publish leaderboard / Publish gamestate message
+              {
+                when: 'is-message-gamemode-end',
+                then: [
+                  'gamemode-end',
+                  'gamestate-end', // Change game status to "end"
+                  'gameactivity-get-daily-leaderboard', // Generate daily leaderboard
+                  'gameactivity-publish-daily-leaderboard', // Publish daily leaderboard message
+                  'gamestate-publish-message', // Publish game status message
                 ],
               },
             ],
           },
           // Handle Game Reset Message
-          {
-            when: ['is-valid-gamereset-message'],
-            then: ['gamestate-reset-game', 'gamestate-publish-message'],
-          },
+          // {
+          //   when: ['is-valid-gamereset-message'],
+          //   then: ['gamestate-reset-game', 'gamestate-publish-message'],
+          // },
           // Handle Player Checkin message
           // TODO Create temporary player name if player does not exist
           {
             when: ['is-valid-playercheckin-message'],
             then: ['gamestate-add-player', 'gamestate-publish-message'],
           },
-          // Handle Clear Slot Message
-          {
-            when: ['is-valid-clearslot-message'],
-            then: [
-              // TODO
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:get-player-info'],
-              },
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:gamestate-remove-player'],
-              },
-              {
-                closure: 'log',
-                level: 'info',
-                '^args': ['closure:send-gamestate-message'],
-              },
-            ],
-          },
+          // Depricated: Handle Clear Slot Message
+          // {
+          //   when: ['is-valid-clearslot-message'],
+          //   then: [
+          //     // TODO
+          //     {
+          //       closure: 'log',
+          //       level: 'info',
+          //       '^args': ['closure:get-player-info'],
+          //     },
+          //     {
+          //       closure: 'log',
+          //       level: 'info',
+          //       '^args': ['closure:gamestate-remove-player'],
+          //     },
+          //     {
+          //       closure: 'log',
+          //       level: 'info',
+          //       '^args': ['closure:send-gamestate-message'],
+          //     },
+          //   ],
+          // },
           // Handle Game Start Message
           {
             when: ['is-valid-gamestart-message'],
-            then: ['gamestate-start', 'gamestate-publish-message'],
+            then: ['gamestate-prepare-to-start', 'gamestate-publish-message'],
           },
           // Handle Player Actions
           {
@@ -92,16 +112,16 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
               'gamestate-publish-message',
             ],
           },
-          // Handle End Game Message
-          {
-            when: ['is-valid-endgame-message'],
-            then: [
-              'gamestate-end', // Change game status to "end"
-              'gameactivity-get-daily-leaderboard', // Generate daily leaderboard
-              'gameactivity-publish-daily-leaderboard', // Publish daily leaderboard message
-              'gamestate-publish-message', // Publish game status message
-            ],
-          },
+          // Depricated: Handle End Game Message
+          // {
+          //   when: ['is-valid-endgame-message'],
+          //   then: [
+          //     'gamestate-end', // Change game status to "end"
+          //     'gameactivity-get-daily-leaderboard', // Generate daily leaderboard
+          //     'gameactivity-publish-daily-leaderboard', // Publish daily leaderboard message
+          //     'gamestate-publish-message', // Publish game status message
+          //   ],
+          // },
           // Handle Turn Start message
           {
             when: ['is-valid-turnstart-message'],
@@ -116,6 +136,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
               {
                 closure: 'publish-amqp-message',
                 type: 'turnstart',
+                routingKey: 'game.turnstart',
                 exchange: conf.amqp.mainExchange,
                 '^data': {
                   '^gameId': 'message.data.gameId',

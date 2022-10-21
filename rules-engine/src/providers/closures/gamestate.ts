@@ -5,22 +5,53 @@ import conf from '../../conf';
 
 export default [
   /**
-   * gamestate-start
+   * gamestate-prepare-to-start
+   * Change the set the start / end time of the game that is about to start
+   * Do this by...
+   * 1. Convert show control gameStartTimestamp message timestamp
+   * 2. Convert show control gameEndTimestamp message timestamp
+   * 3. Save to GameState mongodb collection with the following info...
+   *     - gameStartTimestamp - game start timestamp - using epoch time
+   *     - gameLengthMs - This comes from show control
+   *     - gameStatus - Change to "run"
+   */
+  closureGenerator('gamestate-prepare-to-start', [
+    // 1. Convert show control gameStartTimestamp message timestamp
+    {
+      closure: 'convert-timestamp-to-epoch',
+      key: 'message.data.gameStartTimestamp',
+    },
+    // 2. Convert show control gameEndTimestamp message timestamp
+    {
+      closure: 'convert-timestamp-to-epoch',
+      key: 'message.data.gameEndTimestamp',
+    },
+    // 3. Save to GameState c mongodbollection with the following info...
+    //     - gameStartTimestamp - game start timestamp - using epoch time
+    //     - gameLengthMs - This comes from show control
+    //     - gameStatus - Change to "run"
+    {
+      closure: 'mongodb-save',
+      collection: conf.mongodb.collections.GameState,
+      '^document': {
+        '^_id': 'message.data.gameId',
+        '^gameStartTimestamp': 'message.data.gameStartTimestamp',
+        '^gameEndTimestamp': 'message.data.gameEndTimestamp',
+        '^gameLengthMs': 'message.data.gameLengthMs',
+      },
+    },
+  ]),
+  /**
+   * gamestate-end
    * Change the gamestate for the game identified in the incoming message to run - Triggered by gamestart message
    * Do this by...
-   * 1. Convert show control message timestamp
-   * 2. Save to GameState mongodb collection with the following info...
+   * 1. Save to GameState mongodb collection with the following info...
    *     - gameStartTimestamp - game start timestamp - using epoch time
    *     - gameLengthMs - This comes from show control
    *     - gameStatus - Change to "run"
    */
   closureGenerator('gamestate-start', [
-    // 1. Convert show control message timestamp
-    {
-      closure: 'convert-timestamp-to-epoch',
-      key: 'message.data.gameStartTimestamp',
-    },
-    // 2. Save to GameState c mongodbollection with the following info...
+    // 1. Save to GameState c mongodbollection with the following info...
     //     - gameStartTimestamp - game start timestamp - using epoch time
     //     - gameLengthMs - This comes from show control
     //     - gameStatus - Change to "run"
@@ -30,8 +61,6 @@ export default [
       '^document': {
         '^_id': 'message.data.gameId',
         gameStatus: 'run',
-        '^gameStartTimestamp': 'message.data.gameStartTimestamp',
-        '^gameLengthMs': 'message.data.gameLengthMs',
       },
     },
   ]),

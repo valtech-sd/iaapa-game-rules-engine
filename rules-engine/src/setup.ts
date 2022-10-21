@@ -155,20 +155,20 @@ async function setupAmqp({ logger }: { logger: ILogger }) {
         // Exchange and Queue to exist prior to trying to bind them together.
         // Make sure we have our queues
         await channel.assertQueue(conf.amqp.rulesEngineQueue, {
-          autoDelete: true,
+          autoDelete: false,
           durable: false,
         });
         await channel.assertQueue(conf.amqp.gamestateQueue, {
-          autoDelete: true,
+          autoDelete: false,
           durable: false,
         });
         await channel.assertQueue(conf.amqp.leaderboardQueue, {
-          autoDelete: true,
+          autoDelete: false,
           durable: false,
         });
         // Make sure we have our main exchange
         await channel.assertExchange(conf.amqp.mainExchange, 'topic', {
-          autoDelete: true,
+          autoDelete: false,
           durable: false,
         });
         // Bind the new Exchange and Queues together
@@ -176,6 +176,11 @@ async function setupAmqp({ logger }: { logger: ILogger }) {
           conf.amqp.rulesEngineQueue,
           conf.amqp.mainExchange,
           '#'
+        );
+        await channel.bindQueue(
+          conf.amqp.gamestateQueue,
+          conf.amqp.mainExchange,
+          '#.turnstart'
         );
         await channel.bindQueue(
           conf.amqp.gamestateQueue,

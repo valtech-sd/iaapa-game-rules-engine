@@ -28,6 +28,7 @@ export namespace messages {
     data: {
       gameId: string;
       gameStartTimestamp: string;
+      gameEndTimestamp?: string;
       gameLengthMs: number;
     };
   }
@@ -104,7 +105,7 @@ export namespace messages {
       }>;
     };
   }
-  
+
   export interface MessageTurnStartRulesEngine extends MessageHeader {
     type: 'turnstart';
     data: {

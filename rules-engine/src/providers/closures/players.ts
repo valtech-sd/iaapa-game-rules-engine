@@ -37,7 +37,7 @@ export default [
    *    4.3. Get player info from collection
    * 5. Save player info into facts[outputKey]
    *
-   * @return facts
+   * @return facts - facts[outputKey] = 
    */
   closureGenerator('players-get-from-rfid', [
     // 1. Pull passed in playerRfid parameter into the facts object
