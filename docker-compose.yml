@@ -36,15 +36,15 @@ services:
       - '15674:15674' # Web Stomp
     volumes:
       - type: bind
-        source: 'rabbitmq/config/enabled_plugins.erl'
+        source: './rabbitmq/config/enabled_plugins.erl'
         target: /etc/rabbitmq/enabled_plugins
         read_only: true
       - type: bind
-        source: 'rabbitmq/config/rabbitmq.conf'
+        source: './rabbitmq/config/rabbitmq.conf'
         target: /etc/rabbitmq/rabbitmq.conf
         read_only: true
       - type: bind
-        source: 'rabbitmq/provisioning'
+        source: './rabbitmq/provisioning'
         target: /tmp/provisioning
         read_only: true
       - type: bind
