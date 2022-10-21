@@ -112,14 +112,29 @@ export default [
       outputKey: 'gameStateDoc',
     },
   ]),
+  closureGenerator(
+    '_gamestate-remove-player-with-rfid',
+    function (facts: AppFacts, _context: AppContext) {
+      let locations = facts.gameStateDoc?.locations;
+      if (locations) {
+        locations = locations?.filter(
+          (loc: any) =>
+            loc.playerRfid !== (facts?.message?.data as any).playerRfid
+        );
+        facts.gameStateDoc.locations = locations;
+      }
+      return facts;
+    }
+  ),
   /**
    * gamestate-add-player
    * Add player to the gamestate. Triggered by playercheckin message
    * Do this by...
    * 1. Get player from database
    * 2. Get gamestate
-   * 3. Push player info to locations array in the gamestate document with info about this player and his location
-   * 4. Save the modified game state
+   * 3. Remove player from list if already in the list
+   * 4. Push player info to locations array in the gamestate document with info about this player and his location
+   * 5. Save the modified game state
    * @param facts.message.data.gameId = id of the game we want to fetch
    * @return facts - facts.gameStateDoc = the GameState for the identified game
    */
@@ -132,6 +147,7 @@ export default [
     },
     // Get gamestate
     'gamestate-get', // Stores states in facts.gameStateDoc
+    '_gamestate-remove-player-with-rfid', // Remove player from list if already in list
     // Push player info to locations array
     {
       closure: 'push',

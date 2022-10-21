@@ -137,5 +137,7 @@ export namespace messages {
     | MessageGameReset
     | MessageGameStart
     | MessageEndGame
+    | MessageTurnStartShowControl
+    | MessageTurnStartRulesEngine
     | MessageGameMode;
 }
