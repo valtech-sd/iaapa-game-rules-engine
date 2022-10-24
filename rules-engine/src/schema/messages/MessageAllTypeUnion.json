@@ -29,7 +29,10 @@
           "title": "data"
         },
         "timestamp": {
-          "type": "string",
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },
@@ -77,7 +80,10 @@
           "title": "data"
         },
         "timestamp": {
-          "type": "string",
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },
@@ -153,7 +159,10 @@
           "title": "data"
         },
         "timestamp": {
-          "type": "string",
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },
@@ -187,7 +196,10 @@
           "title": "data"
         },
         "timestamp": {
-          "type": "string",
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },
@@ -231,7 +243,10 @@
           "title": "data"
         },
         "timestamp": {
-          "type": "string",
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },
@@ -265,7 +280,10 @@
           "title": "data"
         },
         "timestamp": {
-          "type": "string",
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },
@@ -304,7 +322,10 @@
           "title": "data"
         },
         "timestamp": {
-          "type": "string",
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },
@@ -343,9 +364,19 @@
                   "score": {
                     "type": "number",
                     "title": "score"
+                  },
+                  "playerName": {
+                    "type": "string",
+                    "title": "playerName"
+                  },
+                  "playerId": {
+                    "type": "string",
+                    "title": "playerId"
                   }
                 },
                 "required": [
+                  "playerId",
+                  "playerName",
                   "rank",
                   "score"
                 ]
@@ -360,7 +391,10 @@
           "title": "data"
         },
         "timestamp": {
-          "type": "string",
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },
@@ -395,6 +429,19 @@
               "type": "string",
               "title": "gameStartTimestamp"
             },
+            "flags": {
+              "type": "object",
+              "properties": {
+                "leaderboardEnabled": {
+                  "type": "boolean",
+                  "title": "leaderboardEnabled"
+                }
+              },
+              "required": [
+                "leaderboardEnabled"
+              ],
+              "title": "flags"
+            },
             "locations": {
               "type": "array",
               "items": {
@@ -428,6 +475,7 @@
             }
           },
           "required": [
+            "flags",
             "gameId",
             "gameStartTimestamp",
             "gameStatus",
@@ -436,7 +484,114 @@
           "title": "data"
         },
         "timestamp": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
           "type": "string",
+          "enum": [
+            "turnstart"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            },
+            "playerRfid": {
+              "type": "string",
+              "title": "playerRfid"
+            },
+            "turnNumber": {
+              "type": "number",
+              "title": "turnNumber"
+            },
+            "turnLengthMs": {
+              "type": "number",
+              "title": "turnLengthMs"
+            }
+          },
+          "required": [
+            "gameId",
+            "playerRfid",
+            "turnLengthMs",
+            "turnNumber"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "title": "timestamp"
+        }
+      },
+      "required": [
+        "data",
+        "timestamp",
+        "type"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "turnstart"
+          ],
+          "title": "type"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "gameId": {
+              "type": "string",
+              "title": "gameId"
+            },
+            "playerRfid": {
+              "type": "string",
+              "title": "playerRfid"
+            },
+            "turnNumber": {
+              "type": "number",
+              "title": "turnNumber"
+            },
+            "turnLengthMs": {
+              "type": "number",
+              "title": "turnLengthMs"
+            }
+          },
+          "required": [
+            "gameId",
+            "playerRfid",
+            "turnLengthMs",
+            "turnNumber"
+          ],
+          "title": "data"
+        },
+        "timestamp": {
+          "type": [
+            "string",
+            "number"
+          ],
           "title": "timestamp"
         }
       },

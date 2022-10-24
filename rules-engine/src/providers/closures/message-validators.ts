@@ -11,6 +11,10 @@ import MessageHeader from '../../schema/messages/MessageHeader.json';
 import MessagePlayerActions from '../../schema/messages/MessagePlayerActions.json';
 import MessagePlayerCheckin from '../../schema/messages/MessagePlayerCheckin.json';
 import MessageTurnStartShowControl from '../../schema/messages/MessageTurnStartShowControl.json';
+import MessageConfigSet from '../../schema/messages/MessageConfigSet.json';
+import MessageConfigGet from '../../schema/messages/MessageConfigGet.json';
+import MessageLeaderboardGet from '../../schema/messages/MessageLeaderboardGet.json';
+import MessageGameStateGetLast from '../../schema/messages/MessageGameStateGetLast.json';
 
 const closures: IClosure[] = [
   /**
@@ -120,6 +124,46 @@ const closures: IClosure[] = [
       closure: 'is-schema-valid',
       '^data': 'message',
       schema: MessageTurnStartShowControl,
+    },
+  ]),
+  /**
+   * Is Valid ConfigSet message
+   */
+  closureGenerator('is-valid-configset-message', [
+    {
+      closure: 'is-schema-valid',
+      '^data': 'message',
+      schema: MessageConfigSet,
+    },
+  ]),
+  /**
+   * Is Valid ConfigGet message
+   */
+  closureGenerator('is-valid-configget-message', [
+    {
+      closure: 'is-schema-valid',
+      '^data': 'message',
+      schema: MessageConfigGet,
+    },
+  ]),
+  /**
+   * Is Valid GameStateGetLast message
+   */
+  closureGenerator('is-valid-gamestategetlast-message', [
+    {
+      closure: 'is-schema-valid',
+      '^data': 'message',
+      schema: MessageGameStateGetLast,
+    },
+  ]),
+  /**
+   * Is Valid GameStateGetLast message
+   */
+  closureGenerator('is-valid-leaderboardget-message', [
+    {
+      closure: 'is-schema-valid',
+      '^data': 'message',
+      schema: MessageLeaderboardGet,
     },
   ]),
 ];

@@ -9,5 +9,6 @@ export default {
     mainExchange: 'ex.iaapa-topic',
     tempGamestateQueue: 'qu.iaapa-unity-gamestate-temp',
     tempLeaderboardQueue: 'qu.iaapa-unity-leaderboard-temp',
+    tempConfigQueue: 'qu.iaapa-config-temp',
   },
 };

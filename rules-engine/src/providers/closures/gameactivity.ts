@@ -98,7 +98,7 @@ export default [
             },
           },
         },
-        { $sort: { rank: 1 } },
+        { $sort: { rank: 1, playerName: 1 } },
       ],
     },
   ]),

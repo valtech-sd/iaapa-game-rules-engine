@@ -14,6 +14,7 @@ export default {
     rulesEngineQueue: 'qu.iaapa-rules-engine',
     gamestateQueue: 'qu.iaapa-unity-gamestate',
     leaderboardQueue: 'qu.iaapa-unity-leaderboard',
+    turnstartQueue: 'qu.iaapa-unity-turnstart',
   },
   mongodb: {
     host: process.env.MONGODB_HOST || 'localhost',

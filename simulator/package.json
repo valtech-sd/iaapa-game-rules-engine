@@ -5,7 +5,8 @@
   "author": "Valtech <US.San_Diego_Engineering@valtech.com>",
   "license": "UNLICENSED",
   "dependencies": {
-    "amqp-cacoon": "^3.2.0"
+    "amqp-cacoon": "^3.2.0",
+    "inquirer": "^9.1.4"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",

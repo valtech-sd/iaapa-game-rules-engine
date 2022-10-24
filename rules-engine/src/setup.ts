@@ -162,6 +162,10 @@ async function setupAmqp({ logger }: { logger: ILogger }) {
           autoDelete: false,
           durable: false,
         });
+        await channel.assertQueue(conf.amqp.turnstartQueue, {
+          autoDelete: false,
+          durable: false,
+        });
         await channel.assertQueue(conf.amqp.leaderboardQueue, {
           autoDelete: false,
           durable: false,
@@ -178,7 +182,7 @@ async function setupAmqp({ logger }: { logger: ILogger }) {
           '#'
         );
         await channel.bindQueue(
-          conf.amqp.gamestateQueue,
+          conf.amqp.turnstartQueue,
           conf.amqp.mainExchange,
           '#.turnstart'
         );

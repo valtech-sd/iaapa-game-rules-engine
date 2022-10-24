@@ -30,6 +30,7 @@ async function start() {
           gameStartTimestamp,
           gameEndTimestamp,
           gameLengthMs,
+          flags: { leaderboardEnabled },
         } = state.gamestate.data;
         console.table({
           gameId,
@@ -37,6 +38,7 @@ async function start() {
           gameStartTimestamp,
           gameEndTimestamp,
           gameLengthMs,
+          leaderboardEnabled,
         });
         // console.table(state?.turnstart?.data);
         console.table(locations);

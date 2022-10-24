@@ -64,7 +64,10 @@
       "title": "data"
     },
     "timestamp": {
-      "type": "string",
+      "type": [
+        "string",
+        "number"
+      ],
       "title": "timestamp"
     }
   },

@@ -23,6 +23,19 @@
           "type": "string",
           "title": "gameStartTimestamp"
         },
+        "flags": {
+          "type": "object",
+          "properties": {
+            "leaderboardEnabled": {
+              "type": "boolean",
+              "title": "leaderboardEnabled"
+            }
+          },
+          "required": [
+            "leaderboardEnabled"
+          ],
+          "title": "flags"
+        },
         "locations": {
           "type": "array",
           "items": {
@@ -56,6 +69,7 @@
         }
       },
       "required": [
+        "flags",
         "gameId",
         "gameStartTimestamp",
         "gameStatus",
@@ -64,7 +78,10 @@
       "title": "data"
     },
     "timestamp": {
-      "type": "string",
+      "type": [
+        "string",
+        "number"
+      ],
       "title": "timestamp"
     }
   },

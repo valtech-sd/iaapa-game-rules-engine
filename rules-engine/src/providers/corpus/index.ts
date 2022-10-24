@@ -149,7 +149,6 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           },
         ],
       },
-      'logFacts',
     ],
   },
   {
@@ -160,6 +159,73 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
         when: ['is-valid-message-header', 'is-amqp-request'],
         then: [],
       },
+    ],
+  },
+  {
+    name: 'Messages (Any Type)',
+    rules: [
+      {
+        // Limit to udp requests with valid message header
+        when: ['is-valid-message-header'],
+        then: [
+          {
+            when: 'is-valid-configset-message',
+            then: [
+              {
+                closure: 'config-save',
+                '^key': 'message.data.key',
+                '^value': 'message.data.value',
+              },
+              // Get config for key
+              {
+                closure: 'config-get',
+                '^key': 'message.data.key',
+                outputKey: 'configget',
+              },
+              {
+                closure: 'publish-amqp-message',
+                exchange: conf.amqp.mainExchange,
+                routingKey: 'game.config',
+                type: 'config',
+                '^data': {
+                  '^key': 'message.data.key',
+                  '^value': 'configget.value',
+                },
+              },
+            ],
+          },
+          {
+            when: 'is-valid-configget-message',
+            then: [
+              // Get config for key
+              {
+                closure: 'config-get',
+                '^key': 'message.data.key',
+                outputKey: 'configget',
+              },
+              // Publish Config Message
+              {
+                closure: 'publish-amqp-message',
+                exchange: conf.amqp.mainExchange,
+                routingKey: 'game.config',
+                type: 'config',
+                '^data': {
+                  '^key': 'message.data.key',
+                  '^value': 'configget.value',
+                },
+              },
+            ],
+          },
+          {
+            when: 'is-valid-leaderboardget-message',
+            then: [
+              'gameactivity-get-daily-leaderboard', // Generate daily leaderboard
+              'gameactivity-publish-daily-leaderboard', // Publish daily leaderboard message
+            ],
+          },
+        ],
+      },
+      'logFacts',
     ],
   },
 ];

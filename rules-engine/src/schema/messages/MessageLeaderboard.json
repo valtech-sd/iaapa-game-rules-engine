@@ -27,9 +27,19 @@
               "score": {
                 "type": "number",
                 "title": "score"
+              },
+              "playerName": {
+                "type": "string",
+                "title": "playerName"
+              },
+              "playerId": {
+                "type": "string",
+                "title": "playerId"
               }
             },
             "required": [
+              "playerId",
+              "playerName",
               "rank",
               "score"
             ]
@@ -44,7 +54,10 @@
       "title": "data"
     },
     "timestamp": {
-      "type": "string",
+      "type": [
+        "string",
+        "number"
+      ],
       "title": "timestamp"
     }
   },

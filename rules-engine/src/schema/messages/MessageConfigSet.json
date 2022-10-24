@@ -4,35 +4,25 @@
     "type": {
       "type": "string",
       "enum": [
-        "turnstart"
+        "configset"
       ],
       "title": "type"
     },
     "data": {
       "type": "object",
       "properties": {
-        "gameId": {
+        "key": {
           "type": "string",
-          "title": "gameId"
+          "title": "key"
         },
-        "playerRfid": {
+        "value": {
           "type": "string",
-          "title": "playerRfid"
-        },
-        "turnNumber": {
-          "type": "number",
-          "title": "turnNumber"
-        },
-        "turnLengthMs": {
-          "type": "number",
-          "title": "turnLengthMs"
+          "title": "value"
         }
       },
       "required": [
-        "gameId",
-        "playerRfid",
-        "turnLengthMs",
-        "turnNumber"
+        "key",
+        "value"
       ],
       "title": "data"
     },

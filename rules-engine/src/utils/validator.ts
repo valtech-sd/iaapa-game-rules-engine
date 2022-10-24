@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Ajv from 'ajv';
-const ajvDefault = new Ajv();
+const ajv = new Ajv({ allowUnionTypes: true });
 
 export class Validator {
   /*
@@ -14,7 +14,6 @@ export class Validator {
    * @return void - Throw error if there is an error
    */
   static validateJson(data: any, schema: any, context?: any) {
-    let ajv = ajvDefault;
     // 1. Validate the facts using passed in schema
     const valid = ajv.validate(schema, data);
     if (!valid) {

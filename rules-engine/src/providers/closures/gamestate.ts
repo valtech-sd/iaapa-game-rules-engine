@@ -218,6 +218,11 @@ export default [
   closureGenerator('gamestate-publish-message', [
     { closure: 'config-get', key: 'showmode', outputKey: 'showmode' },
     {
+      closure: 'config-get',
+      key: 'leaderboardupdate',
+      outputKey: 'leaderboardUpdateEnabled',
+    },
+    {
       when: { closure: 'equal', '^value1': 'showmode', value2: 'idle' },
       then: [
         {
@@ -225,8 +230,11 @@ export default [
           exchange: conf.amqp.mainExchange,
           routingKey: 'game.state.gamestate',
           type: 'gamestate',
-          data: {
+          '^data': {
             gameStatus: 'idle',
+            '^flags': {
+              '^leaderboardEnabled': 'leaderboardUpdateEnabled',
+            },
           },
         },
       ],
@@ -250,6 +258,9 @@ export default [
             '^gameStatus': 'gameStateDoc.gameStatus',
             '^gameStartTimestamp': 'gameStateDoc.gameStartTimestamp',
             '^gameLengthMs': 'gameStateDoc.gameLengthMs',
+            '^flags': {
+              '^leaderboardEnabled': 'leaderboardUpdateEnabled',
+            },
             '^locations': 'gameStateDoc.locations',
           },
         },

@@ -2,8 +2,8 @@ export namespace messages {
   export interface MessageHeader {
     // Message type
     type: string;
-    // Some sort of utc timestamp
-    timestamp: string;
+    // Some sort of utc timestamp from showcontrol / epoch elswhere
+    timestamp: string | number;
   }
 
   export interface MessageGeneric {
@@ -99,6 +99,9 @@ export namespace messages {
       gameId: string;
       gameStatus: string;
       gameStartTimestamp: string;
+      flags: {
+        leaderboardEnabled: boolean;
+      };
       locations: Array<{
         location: number;
         score: number;
@@ -126,6 +129,39 @@ export namespace messages {
       turnNumber: number;
       turnLengthMs: number;
     };
+  }
+
+  export interface MessageConfigSet extends MessageHeader {
+    type: 'configset';
+    data: {
+      key: string;
+      value: string;
+    };
+  }
+
+  export interface MessageConfig extends MessageHeader {
+    type: 'config';
+    data: {
+      key: string;
+      value: string;
+    };
+  }
+
+  export interface MessageConfigGet extends MessageHeader {
+    type: 'configget';
+    data: {
+      key: string;
+    };
+  }
+
+  export interface MessageLeaderboardGet extends MessageHeader {
+    type: 'leaderboardget';
+    data: {};
+  }
+
+  export interface MessageGameStateGetLast extends MessageHeader {
+    type: 'gamestategetlast';
+    data: {};
   }
 
   export type MessageAllTypeUnion =

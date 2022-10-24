@@ -37,6 +37,10 @@ export async function setupAmqp() {
           autoDelete: true,
           durable: false,
         });
+        await channel.assertQueue(conf.amqp.tempConfigQueue, {
+          autoDelete: true,
+          durable: false,
+        });
         // Make sure we have our main exchange
         await channel.assertExchange(conf.amqp.mainExchange, 'topic', {
           autoDelete: false,
@@ -52,6 +56,11 @@ export async function setupAmqp() {
           conf.amqp.tempGamestateQueue,
           conf.amqp.mainExchange,
           '#.turnstart'
+        );
+        await channel.bindQueue(
+          conf.amqp.tempConfigQueue,
+          conf.amqp.mainExchange,
+          '#.config'
         );
         await channel.bindQueue(
           conf.amqp.tempLeaderboardQueue,
