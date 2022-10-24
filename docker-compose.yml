@@ -48,7 +48,7 @@ services:
         target: /tmp/provisioning
         read_only: true
       - type: bind
-        source: 'rabbitmq/secrets'
+        source: './rabbitmq/secrets'
         target: /tmp/secrets
 
   rules-engine:
