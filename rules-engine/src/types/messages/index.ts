@@ -105,7 +105,7 @@ export namespace messages {
       locations: Array<{
         location: number;
         score: number;
-        layerName: number;
+        playerName: number;
         playerId: number;
       }>;
     };
@@ -135,7 +135,7 @@ export namespace messages {
     type: 'configset';
     data: {
       key: string;
-      value: string;
+      value: any;
     };
   }
 
@@ -143,7 +143,7 @@ export namespace messages {
     type: 'config';
     data: {
       key: string;
-      value: string;
+      value: any;
     };
   }
 

@@ -16,7 +16,6 @@
           "title": "key"
         },
         "value": {
-          "type": "string",
           "title": "value"
         }
       },

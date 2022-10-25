@@ -153,7 +153,7 @@ export default [
       closure: 'push',
       key: 'gameStateDoc.locations',
       '^value': {
-        '^name': 'playerInfo.name',
+        '^playerName': 'playerInfo.name',
         '^location': 'message.data.locationNumber',
         score: 0,
         '^playerId': 'playerInfo._id',

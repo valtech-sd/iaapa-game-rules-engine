@@ -171,6 +171,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           {
             when: 'is-valid-configset-message',
             then: [
+              'logFacts',
               {
                 closure: 'config-save',
                 '^key': 'message.data.key',

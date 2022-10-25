@@ -5,8 +5,9 @@
   "author": "Valtech <US.San_Diego_Engineering@valtech.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "@types/inquirer": "~8.0.0",
     "amqp-cacoon": "^3.2.0",
-    "inquirer": "^9.1.4"
+    "inquirer": "~8.0.0"
   },
   "devDependencies": {
     "@types/node": "^12.0.0",
@@ -16,7 +17,8 @@
   "scripts": {
     "sim:showcontrol": "ts-node src/simulate-game.ts",
     "sim:unity-gamescreen": "./amqp_conn_env.sh localhost ts-node src/simulate-gamescreen.ts",
-    "sim:unity-leaderboard": "./amqp_conn_env.sh localhost ts-node src/simulate-leaderboard.ts"
+    "sim:unity-leaderboard": "./amqp_conn_env.sh localhost ts-node src/simulate-leaderboard.ts",
+    "config-cli": "./amqp_conn_env.sh localhost ts-node src/config-cli.ts"
   },
   "husky": {
     "hooks": {
