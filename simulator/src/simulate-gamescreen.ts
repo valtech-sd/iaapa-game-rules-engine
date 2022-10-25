@@ -2,8 +2,12 @@ import { ChannelWrapper, ConsumeMessage } from 'amqp-cacoon';
 import { setupAmqp } from './utils/amqp';
 import conf from './config';
 
+const timeout = (time: number) =>
+  new Promise((resolve) => setTimeout(resolve, time));
+
 async function start() {
   let amqpCacoon = await setupAmqp();
+  await timeout(3000);
   let state: any = {};
   amqpCacoon.registerConsumer(
     conf.amqp.tempGamestateQueue,

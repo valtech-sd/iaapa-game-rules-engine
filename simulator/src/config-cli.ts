@@ -39,7 +39,7 @@ async function start() {
   let amqpCacoon = await setupAmqp();
 
   const prompt = inquirer.createPromptModule();
-  await timeout(1000);
+  await timeout(3000);
   await amqpCacoon.registerConsumer(
     conf.amqp.tempConfigQueue,
     async (channel: ChannelWrapper, msg: ConsumeMessage) => {

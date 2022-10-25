@@ -190,7 +190,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
                 type: 'config',
                 '^data': {
                   '^key': 'message.data.key',
-                  '^value': 'configget.value',
+                  '^value': 'configget',
                 },
               },
             ],
@@ -212,7 +212,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
                 type: 'config',
                 '^data': {
                   '^key': 'message.data.key',
-                  '^value': 'configget.value',
+                  '^value': 'configget',
                 },
               },
             ],

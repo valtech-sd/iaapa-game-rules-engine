@@ -73,5 +73,6 @@ export async function setupAmqp() {
     },
   });
 
+  console.info('Connecting to AMQP2');
   return amqpCacoon;
 }
