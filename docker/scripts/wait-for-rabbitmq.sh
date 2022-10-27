@@ -28,7 +28,8 @@ done
 #echo "RabbitMQ is up - executing command"
 #
 echo "Setting up ENV variables"
-export AMQP_CONNECTION_STRING=amqp://rmqadmin:$(cat /tmp/secrets/rmqadmin-password)@$host:5672
+export AMQP_CONNECTION_STRING=amqp://rmqadmin:$(cat /tmp/rabbitmq/secrets/rmqadmin-password)@$host:5672
+export MONGODB_PASSWORD="$(cat /tmp/mongodb/secrets/$MONGODB_USERNAME-password)"
 
 echo "Starting Application"
 exec $cmd

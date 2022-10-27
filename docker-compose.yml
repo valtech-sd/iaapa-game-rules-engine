@@ -6,13 +6,16 @@ services:
     hostname: db
     container_name: db
     environment:
-      # MONGO_INITDB_ROOT_USERNAME: iaapa
-      # MONGO_INITDB_ROOT_PASSWORD: partyForever2022
+      MONGO_INITDB_ROOT_USERNAME: iaapa
+      MONGO_INITDB_ROOT_PASSWORD: fakepasswordthatwillnotwork
+      MONGODB_CUSTOM_USERNAME: iaapa
       MONGO_INITDB_DATABASE: 'iaapa'
     ports:
       - '27017:27017'
     volumes:
-    - './mongodb:/data/db'
+    - 'mongodb-data:/data/db'
+    - "./mongodb/secrets/:/tmp/secrets"
+    - "./mongodb/entrypoint/:/docker-entrypoint-initdb.d/"
 
   rabbitmq:
     environment:
@@ -68,11 +71,11 @@ services:
       - RMQ_HOST=rabbitmq
       - RMQ_PROTOCOL=amqp
       - UDP_PORT=3333
-        #- MONGODB_USERNAME=iaapa
         #- MONGODB_PASSWORD=partyForever2022
       - MONGODB_HOST=db
       - MONGODB_PORT=27017
       - MONGODB_DATABASE=iaapa
+      - MONGODB_USERNAME=iaapa
     command: "/scripts/wait-for-rabbitmq.sh rabbitmq yarn start:watch"
     volumes:
       - type: bind
@@ -83,4 +86,10 @@ services:
         target: /scripts
       - type: bind
         source: './rabbitmq/secrets'
-        target: /tmp/secrets
+        target: /tmp/rabbitmq/secrets
+      - type: bind
+        source: './mongodb/secrets'
+        target: /tmp/mongodb/secrets
+
+volumes:
+  mongodb-data:
