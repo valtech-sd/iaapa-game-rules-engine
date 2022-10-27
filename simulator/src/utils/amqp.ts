@@ -6,6 +6,10 @@ export async function setupAmqp() {
   console.info('Connecting to AMQP');
   // Since the AMQP Input requires an AMQP Cacoon object, let's start by creating that.
   // AMQP Cacoon is a library that makes it easy to connect to RabbitMQ.
+  let promiseResolve: any;
+  let promAwait = new Promise((resolve) => {
+    promiseResolve = resolve;
+  });
   let amqpCacoon = new AmqpCacoon({
     connectionString: conf.amqp.connectionString,
     amqp_opts: conf.amqp.amqp_opts,
@@ -70,9 +74,11 @@ export async function setupAmqp() {
       } catch (ex) {
         console.error(`ERROR: Setup - AmqpCacoon.onChannelConnect`, ex);
       }
+      promiseResolve(amqpCacoon);
     },
   });
+  await amqpCacoon.getPublishChannel(); // Trigger immediate connection
+  await promAwait;
 
-  console.info('Connecting to AMQP2');
   return amqpCacoon;
 }

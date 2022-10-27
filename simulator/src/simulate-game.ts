@@ -44,13 +44,19 @@ async function start() {
   gameEndTimestamp.setTime(gameStartTimestamp.getTime() + gameLengthMs);
   // Game start message
   console.log(
-    `Preparing to start: Sending gamestart message with start/end time`
+    `Preparing to start: Sending gamestart message with start/end time`,
+    JSON.stringify({
+      currentTime: new Date().toISOString(),
+      gameStartTimestamp: gameStartTimestamp.toISOString(),
+      gameLengthMs: gameLengthMs,
+      gameEndTimestamp: gameEndTimestamp.toISOString(),
+    })
   );
   await sendUdpMessage(
     generators.generateGameStartMessage({
       gameId,
       gameStartTimestamp: gameStartTimestamp.toISOString(),
-      gameEndTimestamp: gameStartTimestamp.toISOString(),
+      gameEndTimestamp: gameEndTimestamp.toISOString(),
       gameLengthMs,
     })
   );
