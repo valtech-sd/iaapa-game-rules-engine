@@ -61,11 +61,11 @@ async function start() {
     })
   );
 
-  await timeout(config.startDelay);
   console.log(`Start Game: Gamemode run`);
   await sendUdpMessage(
     generators.generateGameModeMessage({ gameId, mode: 'run' })
   );
+  await timeout(gameStartTimestamp.getTime() - Date.now());
 
   let turnNumber = 0;
   let lastPlayerRfid: string | undefined;
