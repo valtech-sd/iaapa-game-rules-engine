@@ -23,7 +23,7 @@ services:
     build:
       context: rabbitmq/
       args:
-        RMQ_VERSION_TAG: 3.9.4-management
+        RMQ_VERSION_TAG: 3.11.2-management
     hostname: rabbitmq
     container_name: rabbitmq
     ports:
