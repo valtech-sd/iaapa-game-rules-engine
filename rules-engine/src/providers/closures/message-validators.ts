@@ -30,12 +30,154 @@ const closures: IClosure[] = [
     'is-schema-valid',
     async (_facts: AppFacts, context: AppContext) => {
       // 1. Call validator function
-      return Validator.validateJson(
+      let valid = Validator.validateJson(
         context.parameters.data,
-        context.parameters.schema
+        context.parameters.schema,
+        context
       );
+      context?.logger.debug(
+        `is-schema-valid - valid:${valid} - type: ${context.parameters.validationTags.type}`
+      );
+      return valid;
     }
   ),
+  /**
+   *
+   */
+  closureGenerator('set-validation-tracking-facts', [
+    { closure: 'set', key: 'validation.headerValid', value: false },
+    { closure: 'set', key: 'validation.typeValid', value: false },
+    { closure: 'set', key: 'validation.type', value: null },
+    { closure: 'set', key: 'validation.schemaValid', value: false },
+  ]),
+  /**
+   * is-message-valid
+   * Do this by
+   * 1. Call validator function
+   *
+   * @param context.parameters.type: String   -  Message type string
+   * @param context.parameters.schema: String -  JSON Schema
+   * @param facts.message: object             - Contains message that will be validated
+   * @return true / valse
+   */
+  closureGenerator('is-message-valid', [
+    // Pull parameter into facts object so we can act on it
+    {
+      closure: 'parameter',
+      parameterKey: 'type',
+      outputParameterTo: 'isMessageValid.type',
+    },
+
+    // When we have already found a valid message type we will just shortcut this and return false
+    {
+      when: {
+        closure: 'equal',
+        '^value1': 'validation.typeValid',
+        value2: true,
+      },
+      then: [
+        {
+          closure: 'log',
+          level: 'debug',
+          '^args': [
+            'is-message-valid: ',
+            '^isMessageValid.type',
+            '- Skipping because we already found a valid message type',
+          ],
+        },
+        { closure: 'not', notClosure: 'always' },
+      ], // Return false
+    },
+
+    // When we have not already found a valid message type
+    {
+      when: {
+        closure: 'equal',
+        '^value1': 'validation.typeValid',
+        value2: false,
+      },
+      then: [
+        {
+          when: {
+            closure: 'equal',
+            '^value1': 'isMessageValid.type',
+            '^value2': 'message.type',
+          },
+          then: [
+            {
+              closure: 'log',
+              level: 'debug',
+              '^args': [
+                'is-message-valid: Type match',
+                '^message.type',
+                '===',
+                '^isMessageValid.type',
+              ],
+            },
+            { closure: 'set', key: 'validation.typeValid', value: true },
+            {
+              closure: 'set',
+              key: 'validation.type',
+              '^value': 'isMessageValid.type',
+            },
+            {
+              when: {
+                closure: 'is-schema-valid',
+                '^data': 'message',
+                '^validationTags': { '^type': 'isMessageValid.type' },
+                // context.parameters.schema is passed through implicitly
+              },
+              then: [
+                {
+                  closure: 'log',
+                  level: 'debug',
+                  '^args': [
+                    'is-message-valid: ',
+                    '^isMessageValid.type',
+                    '- Valid message schema',
+                  ],
+                },
+                {
+                  closure: 'set',
+                  key: 'validation.validSchema',
+                  value: true,
+                },
+                {
+                  closure: 'set',
+                  key: 'validation.validType',
+                  '^value': 'validation.type',
+                },
+
+                'always',
+              ],
+            },
+          ],
+        },
+        // Message Type Not Found
+        {
+          when: {
+            closure: 'not',
+            notClosure: 'equal',
+            '^value1': 'validation.type',
+            '^value2': 'message.type',
+          },
+          then: [
+            {
+              closure: 'log',
+              level: 'debug',
+              '^args': [
+                'is-message-valid: Type mismatch',
+                '^message.type',
+                '!==',
+                '^isMessageValid.type',
+              ],
+            },
+            { closure: 'not', notClosure: 'always' },
+          ], // Return false
+        },
+      ],
+    },
+  ]),
   /**
    * Is message header valid
    */
@@ -44,6 +186,9 @@ const closures: IClosure[] = [
       closure: 'is-schema-valid',
       '^data': 'message',
       schema: MessageHeader,
+      validationTags: {
+        type: 'MessageHeader',
+      },
     },
   ]),
   /**
@@ -51,8 +196,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-clearslot-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'clearslot',
       schema: MessageClearSlot,
     },
   ]),
@@ -61,8 +206,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-endgame-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'endgame',
       schema: MessageEndGame,
     },
   ]),
@@ -71,8 +216,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-gamemode-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'gamemode',
       schema: MessageGameMode,
     },
   ]),
@@ -81,8 +226,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-gamereset-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'gamereset',
       schema: MessageGameReset,
     },
   ]),
@@ -91,8 +236,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-gamestart-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'gamestart',
       schema: MessageGameStart,
     },
   ]),
@@ -101,8 +246,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-playeractions-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'playeractions',
       schema: MessagePlayerActions,
     },
   ]),
@@ -111,8 +256,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-playercheckin-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'playercheckin',
       schema: MessagePlayerCheckin,
     },
   ]),
@@ -121,8 +266,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-turnstart-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'turnstart',
       schema: MessageTurnStartShowControl,
     },
   ]),
@@ -131,8 +276,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-configset-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'configset',
       schema: MessageConfigSet,
     },
   ]),
@@ -141,8 +286,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-configget-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'configget',
       schema: MessageConfigGet,
     },
   ]),
@@ -151,8 +296,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-gamestategetlast-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'gamestategetlast',
       schema: MessageGameStateGetLast,
     },
   ]),
@@ -161,8 +306,8 @@ const closures: IClosure[] = [
    */
   closureGenerator('is-valid-leaderboardget-message', [
     {
-      closure: 'is-schema-valid',
-      '^data': 'message',
+      closure: 'is-message-valid',
+      type: 'leaderboardget',
       schema: MessageLeaderboardGet,
     },
   ]),

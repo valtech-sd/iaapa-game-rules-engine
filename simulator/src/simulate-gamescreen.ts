@@ -28,7 +28,6 @@ async function start() {
           gameId,
           gameStatus,
           gameStartTimestamp,
-          gameEndTimestamp,
           gameLengthMs,
           flags: { leaderboardEnabled },
         } = state.gamestate.data;
@@ -36,10 +35,10 @@ async function start() {
           gameId,
           gameStatus,
           gameStartTimestamp,
-          gameStartTimestampElapsed: (gameStartTimestamp - Date.now()) / 1000,
-          gameEndTimestamp,
+          gameStartTimestampElapsed: (Date.now() - gameStartTimestamp) / 1000,
           gameLengthMs,
           leaderboardEnabled,
+          currentTurnLengthMs: state?.turnstart?.data?.turnLengthMs,
         });
         // console.table(state?.turnstart?.data);
         console.table(locations);

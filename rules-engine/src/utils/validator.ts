@@ -17,7 +17,10 @@ export class Validator {
     // 1. Validate the facts using passed in schema
     const valid = ajv.validate(schema, data);
     if (!valid) {
-      context?.logger.error('ValidationError', ajv.errors); // log errors
+      context?.logger.error(`validateJson - isValid: ${valid}`, {
+        tags: context?.parameters?.validationTags,
+        errors: ajv.errors,
+      }); // log errors
       return false;
     }
     return true;

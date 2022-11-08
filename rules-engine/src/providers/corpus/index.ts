@@ -9,6 +9,8 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
       'transform-amqp-message',
       'transform-udp-message',
       'amqp-output-supress-no-message-error',
+      // Set facts used for validation tracking
+      'set-validation-tracking-facts',
     ],
   },
   {
@@ -18,7 +20,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
         // Limit to udp requests with valid message header
         when: ['is-valid-message-header', 'is-udp-request'],
         then: [
-          { closure: 'set', key: 'validation.messageValid', value: true },
+          { closure: 'set', key: 'validation.headerValid', value: true },
           // Log Message Type
           {
             closure: 'log',
@@ -168,6 +170,7 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
         // Limit to udp requests with valid message header
         when: ['is-valid-message-header'],
         then: [
+          { closure: 'set', key: 'validation.headerValid', value: true },
           {
             when: 'is-valid-configset-message',
             then: [
