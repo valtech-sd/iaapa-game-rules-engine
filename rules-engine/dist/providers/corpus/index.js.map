@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/providers/corpus/index.ts"],"names":[],"mappings":";;;AAEa,QAAA,UAAU,GAAuB;IAC5C;QACE,IAAI,EAAE,wBAAwB;QAC9B,KAAK,EAAE,CAAC,UAAU,CAAC;KACpB;IACD;QACE,IAAI,EAAE,uBAAuB;QAC7B,KAAK,EAAE,CAAC,UAAU,CAAC;KACpB;IACD;QACE,IAAI,EAAE,iBAAiB;QACvB,KAAK,EAAE,CAAC,UAAU,CAAC;KACpB;CACF,CAAC;AAEF,kBAAe,kBAAU,CAAC"}
