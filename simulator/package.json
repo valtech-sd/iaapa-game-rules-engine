@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "author": "Valtech <US.San_Diego_Engineering@valtech.com>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
-    "@types/inquirer": "~8.0.0",
+    "@types/inquirer": "~9.0.3",
     "amqp-cacoon": "^3.2.0",
     "inquirer": "~8.0.0"
   },
@@ -15,10 +15,10 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "sim:showcontrol": "ts-node src/simulate-game.ts",
-    "sim:unity-gamescreen": "./amqp_conn_env.sh localhost ts-node src/simulate-gamescreen.ts",
-    "sim:unity-leaderboard": "./amqp_conn_env.sh localhost ts-node src/simulate-leaderboard.ts",
-    "config-cli": "./amqp_conn_env.sh localhost ts-node src/config-cli.ts"
+    "sim:showcontrol": "yarn && ts-node src/simulate-game.ts",
+    "sim:unity-gamescreen": "yarn && ./amqp_conn_env.sh rabbitmq ts-node src/simulate-gamescreen.ts",
+    "sim:unity-leaderboard": "yarn && ./amqp_conn_env.sh rabbitmq ts-node src/simulate-leaderboard.ts",
+    "config-cli": "yarn && ./amqp_conn_env.sh rabbitmq ts-node src/config-cli.ts"
   },
   "husky": {
     "hooks": {

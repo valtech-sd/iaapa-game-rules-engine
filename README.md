@@ -1,33 +1,95 @@
-# IAAPA 2022 Docker Stack
+# Valtech Themed Entertainment Studio, IAAPA 2022 "Beat the Buzz" Backend
 
-This is the Docker stack for a game created by Valtech for IAAPA 2022. 
+This is the backend (a Docker stack) for the "Beat the Buzz" game created by Valtech for IAAPA 2022. 
 
-## Included In This Stack
-1. Rules Engine (using Rule Harvester)
-1. Message Bus (using Rabbit MQ)
-1. Database (using MongoDB)
+![IAAPA AFTERPARTY BEAT THE BUZZ 2022](./documentation/media/iaapa-afterparty-beat-the-buzz-2022.jpg)
 
-## Software Requirements
+## Game Description
+
+### Game Play
+
+Feel your turn and slap the station as fast as you can before the buzz ends! Six players play from a podium console where they interpret signals to know when it is their turn to score as much as possible before the turn ends. If players score past their turn, they benefit the other player whose turn it is
+
+### Theory of Operation
+
+Each player approaches a podium stastion and uses an RFID card to check into one of six stations. Each station has a feedback device to indicate their turn and a scoring button. Both devices as well as lights and other elements are connected to local hardware, which is in turn connected to show control.
+
+The physical game elements are controlled by a central show control server, which is responsible for:
+
+* Keeping track of the game modes: Loading, Playing, Idle, etc.
+* Controlling sounds, lights, etc.
+* Sending UDP signals to a game server.
+
+In addition, a backend game server (this stack) is keeping track of player game state and a leaderboard.
+
+Finally, a UNITY application monitors a message bus for game state changes and updates the game UI accordingly.
+
+This project represents the backend game server component.
+
+## Included In This Stack (Game Server)
+1. A rules engine service that receives signals from the game show control system (implementing our [Open-Source project Rule Harvester](https://github.com/valtech-sd/rule-harvester))
+2. A RabbitMQ message bus used to send signals to the game UI implemented in Unity.
+3. A MongoDB database to keep player state.
+
+### Dependencies
 1. [Docker and Docker Compose](https://www.docker.com/products/docker-desktop/)
-1. [Yarn](https://yarnpkg.com/getting-started/install)
+2. (OPTIONAL if you want to run tools locally) [Yarn](https://yarnpkg.com/getting-started/install)
 
-   > ℹ️**INFO:** For Mac, if you installed Node via NVM and NVM via HomeBrew, `corepack` may not be installed for you automatically.  [You would then need to install it first before enabling it.](https://stackoverflow.com/a/70094249/3375398)
+   > ℹ️ **NOTE:** For Mac, if you installed Node via NVM and NVM via HomeBrew, `corepack` may not be installed for you automatically.  [You would then need to install it first before enabling it.](https://stackoverflow.com/a/70094249/3375398)
+   
+## Running the Project and its Components
+   
+> ℹ️ **Note:** The first time you run the project, it will take a while to download the images and build the containers. Subsequent runs will be much faster.
 
-## How To Pull the Project
+### How To Run the Server Stack in PROD mode
+1. Edit docker-compose.yml, scroll to the "rules-engine" service:
+   * change the `NODE_ENV` environment variable to `production`.
+   * Uncomment the line for the "Production Command".
+2. In Terminal, go to local directory root folder for the project.
+3. Run `docker compose up -d` to start the stack.
+
+> ℹ️ **Note:** In PROD mode, if you make code changes to the server stack code, you'll need to restart the docker stack.
+
+### How To Run the Server Stack in DEV mode
+1. Edit docker-compose.yml, scroll to the "rules-engine" service:
+   * change the `NODE_ENV` environment variable to `dev`.
+   * Uncomment the line for the "Dev Command".
+2. In Terminal, go to local directory root folder for the project.
+3. Run `docker compose up -d` to start the stack.
+
+> ℹ️ **Note:** In DEV mode, if you make code changes to the server stack code, nodemon will automatically restart the server.
+
+### The server is running, now what?
+
+With the server running, you can send UDP signals
+
+### How to Run the Simulator Tools
+
+The simulator tools allow you to send simulated signals to the stack. This is useful for testing the stack and the rules engine.
+
+The commands can be run as follows:
+```bash
+$ ./docker-compose-run.sh /home/node/simulator <yarn command>
+```
+
+See the YARN commands in the file `simulator/package.json` for the available commands.
+
+## Project Lifecycle
+
+### How To Pull the Project
 1. Download all needed tools from listed software requirements above.
-1. [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) from GitHub.
+2. [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) from GitHub.
 
-## How To Run the Project
-1. In Terminal, go to local directory root folder for the project.
-1. Run `docker compose up -d` to start the stack.
-
-## How To Edit the Project
+### How To Edit the Project
 1. Open project files in any editor to update and save.
+2. Depending on the files changed, you might need to restart the server stack.
 
-## How To Push Changes to the Project
+### How To Push Changes to the Project (on command line GIT)
 1. `git status` to check file changed.
-1. `git restore {file}` to unstage files that should not be commited.
-1. `git add {file}` to stage files that should be commited.
-1. `git commit -m "{change info}"` to commit the files.
-1. `git push` to push changes to GitHub.
+2. `git restore {file}` to unstage files that should not be commited.
+3. `git add {file}` to stage files that should be commited.
+4. `git commit -m "{change info}"` to commit the files.
+5. `git push` to push changes to GitHub.
+
+Alternatively, use a GUI tool like [GitHub Desktop](https://desktop.github.com/) or [Sourcetree](https://www.sourcetreeapp.com) to push changes to GitHub.
 

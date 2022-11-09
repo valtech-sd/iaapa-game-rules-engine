@@ -67,6 +67,7 @@ services:
     environment:
       - LOG_STYLE=colored
       - LOG_LEVEL=trace
+      # Set your NODE_ENV to match your COMMAND BELOW!!
       - NODE_ENV=dev
       - RMQ_HOST=rabbitmq
       - RMQ_PROTOCOL=amqp
@@ -76,7 +77,13 @@ services:
       - MONGODB_PORT=27017
       - MONGODB_DATABASE=iaapa
       - MONGODB_USERNAME=iaapa
-    command: "/scripts/wait-for-rabbitmq.sh rabbitmq yarn start:watch"
+    
+    # Uncomment ONE of the two commands below! (and set NODE_ENV above)
+    # Production Command
+    #command: "yarn start-compose"
+    # Dev Command (uses nodemon)
+    command: "yarn start-compose:watch"
+    
     volumes:
       - type: bind
         source: './rules-engine'
@@ -90,6 +97,9 @@ services:
       - type: bind
         source: './mongodb/secrets'
         target: /tmp/mongodb/secrets
+      - type: bind
+        source: './simulator'
+        target: /home/node/simulator
 
 volumes:
   mongodb-data:
