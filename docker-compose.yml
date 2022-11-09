@@ -61,7 +61,7 @@ services:
     container_name: rules-engine
     user: 'node'
     restart: always
-    working_dir: /home/node/app
+    working_dir: /home/node/rules-engine
     ports:
       - '3333:3333/udp'
     environment:
@@ -87,7 +87,7 @@ services:
     volumes:
       - type: bind
         source: './rules-engine'
-        target: /home/node/app
+        target: /home/node/rules-engine
       - type: bind
         source: './docker/scripts'
         target: /scripts

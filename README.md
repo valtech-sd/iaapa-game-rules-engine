@@ -69,7 +69,7 @@ The simulator tools allow you to send simulated signals to the stack. This is us
 
 The commands can be run as follows:
 ```bash
-$ ./docker-compose-run.sh /home/node/simulator <yarn command>
+$ ./docker-compose-run.sh simulator <yarn command>
 ```
 
 See the YARN commands in the file `simulator/package.json` for the available commands.

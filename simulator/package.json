@@ -5,7 +5,7 @@
   "author": "Valtech <US.San_Diego_Engineering@valtech.com>",
   "license": "MIT",
   "dependencies": {
-    "@types/inquirer": "~9.0.3",
+    "@types/inquirer": "~8.1.3",
     "amqp-cacoon": "^3.2.0",
     "inquirer": "~8.0.0"
   },
