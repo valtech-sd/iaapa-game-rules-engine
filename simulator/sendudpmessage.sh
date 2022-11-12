@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 MESSAGE_FILE_PATH=$1
 
@@ -15,4 +15,4 @@ then
 	exit;
 fi
 
-cat $MESSAGE_FILE_PATH | nc -4u -w1 localhost 3333
+cat $MESSAGE_FILE_PATH | nc -u -w1 localhost 3333
