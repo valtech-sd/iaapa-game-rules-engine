@@ -61,6 +61,7 @@ async function start() {
     })
   );
 
+  await timeout(1000);
   console.log(`Start Game: Gamemode run`);
   await sendUdpMessage(
     generators.generateGameModeMessage({ gameId, mode: 'run' })
