@@ -14,6 +14,32 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
     ],
   },
   {
+    name: 'Debug Log Incoming Messages', // This corpus groups logs all incoming messages (UDP + AMQP)
+    rules: [
+      {
+        when: ['is-udp-request'],
+        then: [
+          {
+            closure: 'debug-message-to-file',
+            '^message': 'message',
+            filePrefix: 'udp/message',
+          },
+        ],
+      },
+      {
+        when: ['is-amqp-request'],
+        then: [
+          // We log amqp messages when we recieve them because it is easier that way. We are setup to recieve all messages ... even if we sent them out too
+          {
+            closure: 'debug-message-to-file',
+            '^message': 'message',
+            filePrefix: 'amqp/message',
+          },
+        ],
+      },
+    ],
+  },
+  {
     name: 'Message Handler UDP Messages',
     rules: [
       {
@@ -67,39 +93,11 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
               },
             ],
           },
-          // Handle Game Reset Message
-          // {
-          //   when: ['is-valid-gamereset-message'],
-          //   then: ['gamestate-reset-game', 'gamestate-publish-message'],
-          // },
           // Handle Player Checkin message
-          // TODO Create temporary player name if player does not exist
           {
             when: ['is-valid-playercheckin-message'],
             then: ['gamestate-add-player', 'gamestate-publish-message'],
           },
-          // Depricated: Handle Clear Slot Message
-          // {
-          //   when: ['is-valid-clearslot-message'],
-          //   then: [
-          //     // TODO
-          //     {
-          //       closure: 'log',
-          //       level: 'info',
-          //       '^args': ['closure:get-player-info'],
-          //     },
-          //     {
-          //       closure: 'log',
-          //       level: 'info',
-          //       '^args': ['closure:gamestate-remove-player'],
-          //     },
-          //     {
-          //       closure: 'log',
-          //       level: 'info',
-          //       '^args': ['closure:send-gamestate-message'],
-          //     },
-          //   ],
-          // },
           // Handle Game Start Message
           {
             when: ['is-valid-gamestart-message'],
@@ -114,16 +112,6 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
               'gamestate-publish-message',
             ],
           },
-          // Depricated: Handle End Game Message
-          // {
-          //   when: ['is-valid-endgame-message'],
-          //   then: [
-          //     'gamestate-end', // Change game status to "end"
-          //     'gameactivity-get-daily-leaderboard', // Generate daily leaderboard
-          //     'gameactivity-publish-daily-leaderboard', // Publish daily leaderboard message
-          //     'gamestate-publish-message', // Publish game status message
-          //   ],
-          // },
           // Handle Turn Start message
           {
             when: ['is-valid-turnstart-message'],
@@ -150,16 +138,6 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
             ],
           },
         ],
-      },
-    ],
-  },
-  {
-    name: 'Message AMQP Config Messages',
-    rules: [
-      {
-        // Limit to udp requests with valid message header
-        when: ['is-valid-message-header', 'is-amqp-request'],
-        then: [],
       },
     ],
   },

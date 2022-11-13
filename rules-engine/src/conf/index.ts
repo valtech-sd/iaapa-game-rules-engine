@@ -3,6 +3,7 @@ export default {
     style: process.env.LOG_STYLE || 'colored',
     level: process.env.LOG_LEVEL || 'trace',
     appName: 'IAAPA_BACKEND',
+    enableDebugFileLog: true, // Used to log messages to files
   },
   server: {
     port: parseInt(process.env.UDP_PORT || '3333'),

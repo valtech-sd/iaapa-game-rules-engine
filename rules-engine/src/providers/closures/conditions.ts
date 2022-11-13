@@ -18,7 +18,7 @@ const closures: IClosure[] = [
   closureGenerator('is-amqp-request', [
     {
       closure: 'allFieldsDefined',
-      fields: ['udpRequest'],
+      fields: ['amqpMessage'],
     },
   ]),
   /**
