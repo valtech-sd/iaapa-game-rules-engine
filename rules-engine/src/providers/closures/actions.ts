@@ -113,7 +113,7 @@ export default [
 
         context.logger.info(`START: Writing file: ${fileName}`);
         // 5. write file
-        writeFile(fileName, JSON.stringify(message), (err) => {
+        writeFile(fileName, JSON.stringify(message, null, 2), (err) => {
           if (err) {
             context.logger.error(`ERROR: Writing file: ${fileName}`, err);
           }
