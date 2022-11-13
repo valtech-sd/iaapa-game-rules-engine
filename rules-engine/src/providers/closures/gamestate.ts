@@ -169,14 +169,15 @@ export default [
   ]),
   /**
    * _gamestate-apply-actions-add-score-to-state
-   * Internal use closure only. Not intented for use outside this file
+   * Internal use closure only. Not intended for use outside this file
    * This adds scores to the game state located in facts.gameStateDoc
    * Do this by...
    * 1. Check to ensure we are handling a playeractions message else we return
    * 2. Get scoring players rfid
    * 3. get the scoring player state info in the game state document (Used to add score to this object)
    * 4. Loop over the actions in the player action message
-   * 5. If the action type is "hits" whlie looping then add action.count to the scoring players score from
+   * 5. If the action type is "hits" while looping then add action.count to the scoring players score from
+   *    See the comments in the section for specific scoring.
    **/
   closureGenerator(
     '_gamestate-apply-actions-add-score-to-state',
@@ -194,7 +195,15 @@ export default [
         for (let action of playerActionsMessage?.data?.actions) {
           context.logger.trace('action', JSON.stringify(action, null, 2));
           if (action?.type === 'hits') {
-            // 5. If the action type is "hits" whlie looping then add action.count to the scoring players score from
+            // 5. If the action type is "hits" while looping then add action.count to the scoring players score from
+            // Score based on scoring-player hit vs non-scoring-player hits
+            if (action?.playerRfid !== scoringPlayerRfid) {
+              // Hits are not by the scoring player, so these are scored as 1 point
+              scoringPlayerLocationInfo.score += action.count;
+            } else {
+              // Hits are by the scoring player so, these are scored as more points
+              scoringPlayerLocationInfo.score += (action.count * 3);
+            }
             scoringPlayerLocationInfo.score += action.count;
           } else {
             context.logger.error(`Unknown action type: ${action?.type}`);
