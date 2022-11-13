@@ -9,8 +9,8 @@ function help() {
   echo "This command is used to run yarn (npm) scripts your package.json file"
   echo "Command should be used as follows"
   echo " ./docker-compose-run.sh [CONTAINER_WORKING_DIR_OF_NODE_PACKAGE] [YARN_SCRIPT]"
-  echo "   [CONTAINER_WORKING_DIR_OF_NODE_PACKAGE] - Dircty in container where the package.json is located."
-  echo "                                           - Alternativly you can use the shortcut 'simulator' or 'rules-engine' for those respective directories"
+  echo "   [CONTAINER_WORKING_DIR_OF_NODE_PACKAGE] - Directly in container where the package.json is located."
+  echo "                                           - Alternatively you can use the shortcut 'simulator' or 'rules-engine' for those respective directories"
   echo "   [YARN_SCRIPT]                           - Script within the package.json file to run"
   echo ""
 }

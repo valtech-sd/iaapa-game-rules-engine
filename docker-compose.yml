@@ -13,9 +13,10 @@ services:
     ports:
       - '27017:27017'
     volumes:
-    - 'mongodb-data:/data/db'
+    - "mongodb-data:/data/db"
     - "./mongodb/secrets/:/tmp/secrets"
     - "./mongodb/entrypoint/:/docker-entrypoint-initdb.d/"
+    - "./mongodb/mongoimport/:/tmp/mongoimport/"
 
   rabbitmq:
     environment:
@@ -27,7 +28,7 @@ services:
     hostname: rabbitmq
     container_name: rabbitmq
     ports:
-      #- '4369:4369'   # RMQ EMPD Peer Discovery
+      #- "4369:4369'   # RMQ EMPD Peer Discovery
       - '5672:5672'   # AMQP
       - '5671:5671'   # AMQPS (AMQP over TLS)
       - '1883:1883'   # MQTT

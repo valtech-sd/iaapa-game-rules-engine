@@ -61,7 +61,7 @@ This project represents the backend game server component.
 
 ### The server is running, now what?
 
-With the server running, you can send UDP signals
+With the server running, you can send UDP signals.
 
 ### How to Run the Simulator Tools
 
@@ -73,6 +73,21 @@ $ ./docker-compose-run.sh simulator <yarn command>
 ```
 
 See the YARN commands in the file `simulator/package.json` for the available commands.
+
+### How to import players into the iaapa db in the mongodb service
+
+The process is:
+1. Copy the data file to the `mongoimport` folder. Be sure to use the structure of the provided example-import.csv
+2. Run the `mongoimport` command (below).
+3. Verify the data was imported correctly.
+
+```bash
+./docker-compose-mongoimport.sh <file name>
+```
+
+> **Notes:** 
+> - The `mongoimport` command will fail if the file is not in the `./mongodb/mongoimport` folder.
+> - The import will do an UPSERT, so if you run the command again, it will update the existing records based on the rfid field.
 
 ## Project Lifecycle
 
@@ -93,3 +108,26 @@ See the YARN commands in the file `simulator/package.json` for the available com
 
 Alternatively, use a GUI tool like [GitHub Desktop](https://desktop.github.com/) or [Sourcetree](https://www.sourcetreeapp.com) to push changes to GitHub.
 
+## Credits
+
+**Game Design**
+Jenny Lim, Erica McCay
+
+**Backend Development**
+Daniel Morris, Le Cabrera, Eric Soto
+
+**Unity Development**
+Natan Couture-Dumais, Le Cabrera
+
+**Project Leadership**
+Victoria Gonzalez, Eric Soto
+
+**Game Show Control**
+Joe Fox, Chris Large
+
+## Roadmap
+
+- Explain the examples in simulator/examples
+- Add the data contract documentation for the UDP messages to be received
+- Explain how different UDP messages control different parts of the game backend
+- Add the data contract documentation for the RabbitMQ messages to be sent for the UI
