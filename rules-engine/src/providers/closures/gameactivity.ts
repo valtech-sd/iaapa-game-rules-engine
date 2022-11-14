@@ -2,6 +2,7 @@ import { closureGenerator } from 'rule-harvester';
 import _ from 'lodash';
 // import { AppFacts, AppContext } from '../../types';
 import conf from '../../conf';
+import excludedPlayers from '../../conf/excluded_players';
 
 export default [
   /**
@@ -52,11 +53,11 @@ export default [
           '^$match': {
             loaderboardEnabled: true,
             actionType: 'hits',
-            // '^timestamp': {
-            //   // Current day rnage
-            //   '^$gte': 'timestampRange.start',
-            //   '^$lte': 'timestampRange.end',
-            // },
+            '^timestamp': {
+              // Current day rnage
+              '^$gte': 'timestampRange.start',
+              '^$lte': 'timestampRange.end',
+            },
           },
         },
         {
@@ -80,6 +81,11 @@ export default [
           },
         },
         { $unwind: '$players' },
+        {
+          '^$match': {
+            'players.name': { $nin: excludedPlayers },
+          },
+        },
         {
           $project: {
             playerId: '$_id.scoringPlayerId',

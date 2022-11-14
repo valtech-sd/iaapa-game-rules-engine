@@ -89,6 +89,23 @@ The process is:
 > - The `mongoimport` command will fail if the file is not in the `./mongodb/mongoimport` folder.
 > - The import will do an UPSERT, so if you run the command again, it will update the existing records based on the rfid field.
 
+### How to exclude players from leaderboard
+
+The process is...
+
+1. Open `rules-engine/src/conc/excluded_players.ts`
+2. It should be a valid JSON array like like like like
+
+```json
+export default [
+   'Player_123',
+   'Player_321'
+]
+```
+
+3. Save the file
+4. Restart the rules engine container: `docker compose restart rules-engine`
+
 ## Project Lifecycle
 
 ### How To Pull the Project
