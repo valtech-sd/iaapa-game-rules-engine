@@ -113,13 +113,17 @@ export default [
     },
   ]),
   closureGenerator(
-    '_gamestate-remove-player-with-rfid',
+    '_gamestate-remove-player-currently-in-locations',
     function (facts: AppFacts, _context: AppContext) {
       let locations = facts.gameStateDoc?.locations;
       if (locations) {
+        // Remove player from list if the incoming message contains the rfid of a player in the list.
+        //  The player will then be re-added (probably in a new location) after being remove
+        // Remove a player from the list if we already have the player in this location
         locations = locations?.filter(
           (loc: any) =>
-            loc.playerRfid !== (facts?.message?.data as any).playerRfid
+            loc.playerRfid !== (facts?.message?.data as any).playerRfid && // Keep if rfid not equal
+            loc.location !== (facts?.message?.data as any).locationNumber // And location not equal
         );
         facts.gameStateDoc.locations = locations;
       }
@@ -147,7 +151,7 @@ export default [
     },
     // Get gamestate
     'gamestate-get', // Stores states in facts.gameStateDoc
-    '_gamestate-remove-player-with-rfid', // Remove player from list if already in list
+    '_gamestate-remove-player-currently-in-locations', // Remove player from list if already in list
     // Push player info to locations array
     {
       closure: 'push',
@@ -202,7 +206,7 @@ export default [
               scoringPlayerLocationInfo.score += action.count;
             } else {
               // Hits are by the scoring player so, these are scored as more points
-              scoringPlayerLocationInfo.score += (action.count * 3);
+              scoringPlayerLocationInfo.score += action.count * 3;
             }
             scoringPlayerLocationInfo.score += action.count;
           } else {
