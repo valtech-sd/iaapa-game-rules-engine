@@ -18,7 +18,7 @@
     "sim:showcontrol": "yarn && ts-node src/simulate-game.ts",
     "sim:unity-gamescreen": "yarn && ./amqp_conn_env.sh rabbitmq ts-node src/simulate-gamescreen.ts",
     "sim:unity-leaderboard": "yarn && ./amqp_conn_env.sh rabbitmq ts-node src/simulate-leaderboard.ts",
-    "udp:leaderboardget": "/bin/sh -c 'ls && ./sendudpmessage.sh ./examples/leaderboardget.json'",
+    "udp:leaderboardget": "yarn && ./sendudpmessage.sh ./examples/leaderboardget.json",
     "config-cli": "yarn && ./amqp_conn_env.sh rabbitmq ts-node src/config-cli.ts"
   },
   "husky": {

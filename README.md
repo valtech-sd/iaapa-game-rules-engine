@@ -12,7 +12,7 @@ Feel your turn and slap the station as fast as you can before the buzz ends! Six
 
 ### Theory of Operation
 
-Each player approaches a podium stastion and uses an RFID card to check into one of six stations. Each station has a feedback device to indicate their turn and a scoring button. Both devices as well as lights and other elements are connected to local hardware, which is in turn connected to show control.
+Each player approaches a podium station and uses an RFID card to check into one of six stations. Each station has a feedback device to indicate their turn and a scoring button. Both devices as well as lights and other elements are connected to local hardware, which is in turn connected to show control.
 
 The physical game elements are controlled by a central show control server, which is responsible for:
 
@@ -63,18 +63,34 @@ This project represents the backend game server component.
 
 With the server running, you can send UDP signals.
 
-### How to Run the Simulator Tools
+### How to Run the Control Console (tools console)
 
-The simulator tools allow you to send simulated signals to the stack. This is useful for testing the stack and the rules engine.
+The rules-engine service includes a control console that can be used to run various tools. To run the control console:
 
-The commands can be run as follows:
+```bash
+$ ./docker-compose-run-control-console.sh
+```
+
+Once the console is running, you can pick from the following actions:
+
+0. Exit - to exit the console.
+1. Run a simulated game with generated data (random players)
+2. Display the Game Screen UI (shows game status as a game runs)
+3. Display the Leaderboard UI (shows leaderboard messages when received)
+4. Force a publishing of the current daily leaderboard
+
+### How to Run the Rules-Engine Tools (individually)
+
+The rules-engine tools (in the simulator folder) allow you to send simulated signals to the stack and to display game information. This is useful for testing the stack and the rules engine or for seeing the status of a running game.
+
+The tools can be run as follows:
 ```bash
 $ ./docker-compose-run.sh simulator <yarn command>
 ```
 
 See the YARN commands in the file `simulator/package.json` for the available commands.
 
-### How to import players into the iaapa db in the mongodb service
+### How to import players into the IAAPA db in the mongodb service
 
 The process is:
 1. Copy the data file to the `mongoimport` folder. Be sure to use the structure of the provided example-import.csv
@@ -94,14 +110,14 @@ The process is:
 The process is...
 
 1. Open `rules-engine/src/conc/excluded_players.ts`
-2. It should be a valid JSON array like like like like
+2. It should be a valid JSON array like the below
 
-```json
-export default [
-   'Player_123',
-   'Player_321'
-]
-```
+   ```javascript
+   export default [
+      'Player_123',
+      'Player_321'
+   ]
+   ```
 
 3. Save the file
 4. Restart the rules engine container: `docker compose restart rules-engine`
@@ -144,6 +160,7 @@ Joe Fox, Chris Large
 
 ## Roadmap
 
+- Add section on turning on logging (and describe the message_logs directory)
 - Explain the examples in simulator/examples
 - Add the data contract documentation for the UDP messages to be received
 - Explain how different UDP messages control different parts of the game backend
