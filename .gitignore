@@ -2,3 +2,4 @@ rabbitmq/secrets/rmqadmin-password
 node_modules/
 mongodb/secrets/iaapa-password
 message_logs/**/*.json
+mongodb/data/

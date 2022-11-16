@@ -7,13 +7,13 @@ services:
     container_name: db
     environment:
       MONGO_INITDB_ROOT_USERNAME: iaapa
-      MONGO_INITDB_ROOT_PASSWORD: fakepasswordthatwillnotwork
+      MONGO_INITDB_ROOT_PASSWORD: fakepasswordthatwillnotwork # Required for the entrypoint user creation to work
       MONGODB_CUSTOM_USERNAME: iaapa
       MONGO_INITDB_DATABASE: 'iaapa'
     ports:
       - '27017:27017'
     volumes:
-    - "mongodb-data:/data/db"
+    - "./mongodb/data:/data/db"
     - "./mongodb/secrets/:/tmp/secrets"
     - "./mongodb/entrypoint/:/docker-entrypoint-initdb.d/"
     - "./mongodb/mongoimport/:/tmp/mongoimport/"
