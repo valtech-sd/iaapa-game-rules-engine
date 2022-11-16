@@ -20,7 +20,8 @@ until [ "$action" -eq "0" ]; do
   echo "2. Display the Game Screen UI (shows game status as a game runs)"
   echo "3. Display the Leaderboard UI (shows leaderboard messages when received)"
   echo "4. Force a publishing of the current daily leaderboard"
-  echo "5. Force game mode to end"
+  echo "5. Send game mode: end"
+  echo "6. Send game mode: idle"
   # Read the user's choice
   read -p "Action: " action
   # Decide what to do based on the user's choice
@@ -42,6 +43,9 @@ until [ "$action" -eq "0" ]; do
           ;;
       5)
           yarn udp:gamemodeend
+          ;;
+      6)
+          yarn udp:gamemodeidle
           ;;
       *)
           echo "Invalid option"

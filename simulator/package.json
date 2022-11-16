@@ -20,6 +20,7 @@
     "sim:unity-leaderboard": "yarn && ./amqp_conn_env.sh rabbitmq ts-node src/simulate-leaderboard.ts",
     "udp:leaderboardget": "yarn && ./sendudpmessage.sh ./examples/leaderboardget.json",
     "udp:gamemodeend": "yarn && ./sendudpmessage.sh ./examples/gamemode_end_lastgameid.json",
+    "udp:gamemodeidle": "yarn && ./sendudpmessage.sh ./examples/gamemode_idle.json",
     "config-cli": "yarn && ./amqp_conn_env.sh rabbitmq ts-node src/config-cli.ts"
   },
   "husky": {

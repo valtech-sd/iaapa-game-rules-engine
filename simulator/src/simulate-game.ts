@@ -36,7 +36,7 @@ async function start() {
       })
     );
   }
-  await timeout(1000);
+  // await timeout(1000);
   let gameStartTimestamp = new Date();
   let gameLengthMs = config.gameLengthMs;
   let gameEndTimestamp = new Date();
