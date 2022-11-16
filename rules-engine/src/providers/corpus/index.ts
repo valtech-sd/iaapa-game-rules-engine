@@ -57,6 +57,14 @@ export const ruleCorpus: ICorpusRuleGroup[] = [
           {
             when: ['is-valid-gamemode-message'],
             then: [
+              {
+                when: 'is-gameid-in-message',
+                then: 'set-last-gameid-config',
+              },
+              {
+                when: 'is-gameid-missing-from-message',
+                then: 'fill-in-gameid-from-config',
+              },
               // If message gamemode = idle -> Switch to Idle mode a
               {
                 when: 'is-message-gamemode-idle',

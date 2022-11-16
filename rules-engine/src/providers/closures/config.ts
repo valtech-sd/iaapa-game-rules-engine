@@ -19,7 +19,10 @@ export default [
   closureGenerator(
     'config-get',
     async (facts: AppFacts, context: AppContext) => {
-      context?.logger?.trace('START: closure:config-get');
+      context?.logger?.trace('START: closure:config-get', {
+        key: context.parameters.key,
+        outputKey: context.parameters.outputKey,
+      });
       // 1. Validate parameters
       if (!context.parameters.key) {
         context.logger.error(
@@ -27,7 +30,7 @@ export default [
         );
         throw new Error('closure:config-get: key parameter not passed in');
       }
-      
+
       // 2. Filter by key (key is the document _id)
       let document = await context.mongoDatabase
         .collection(conf.mongodb.collections.Config)
@@ -55,7 +58,10 @@ export default [
   closureGenerator(
     'config-save',
     async (facts: AppFacts, context: AppContext) => {
-      context?.logger?.trace('START: closure:config-save');
+      context?.logger?.trace('START: closure:config-save', {
+        key: context.parameters.key,
+        value: context.parameters.value,
+      });
       // 1. Validate parameters
       if (!context.parameters.key) {
         context.logger.error(
@@ -69,7 +75,8 @@ export default [
         .collection(conf.mongodb.collections.Config)
         .updateOne(
           { _id: context.parameters.key },
-          { $set: { value: context.parameters.value } }
+          { $set: { value: context.parameters.value } },
+          { upsert: true }
         );
       context?.logger?.trace('END: closure:config-save');
       return facts;

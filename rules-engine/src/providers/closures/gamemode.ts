@@ -47,4 +47,31 @@ export default [
   closureGenerator('is-message-gamemode-end', [
     { closure: 'is-message-gamemode', mode: 'end' },
   ]),
+  // is gameId incldued in the message
+  closureGenerator('is-gameid-in-message', (facts: any, _context: any) => {
+    return facts?.message?.data?.gameId;
+  }),
+  // is gameId missing from the message
+  closureGenerator(
+    'is-gameid-missing-from-message',
+    (facts: any, _context: any) => {
+      return !facts?.message?.data?.gameId;
+    }
+  ),
+  // is gameId missing from the message
+  closureGenerator('set-last-gameid-config', [
+    {
+      closure: 'config-save',
+      key: 'lastgameid',
+      '^value': 'message.data.gameId',
+    },
+  ]),
+  // is gameId missing from the message
+  closureGenerator('fill-in-gameid-from-config', [
+    {
+      closure: 'config-get',
+      key: 'lastgameid',
+      outputKey: 'message.data.gameId',
+    },
+  ]),
 ];
