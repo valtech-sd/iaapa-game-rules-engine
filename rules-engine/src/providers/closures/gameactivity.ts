@@ -2,7 +2,7 @@ import { closureGenerator } from 'rule-harvester';
 import _ from 'lodash';
 // import { AppFacts, AppContext } from '../../types';
 import conf from '../../conf';
-import excludedPlayers from '../../conf/excluded_players';
+// import excludedPlayers from '../../conf/excluded_players';
 
 export default [
   /**
@@ -83,7 +83,7 @@ export default [
         { $unwind: '$players' },
         {
           '^$match': {
-            'players.name': { $nin: excludedPlayers },
+            'players.excludeFromLeaderboard': { $ne: 1 },
           },
         },
         {
