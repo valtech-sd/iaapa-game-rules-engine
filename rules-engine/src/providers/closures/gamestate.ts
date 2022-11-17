@@ -204,8 +204,10 @@ export default [
             if (action?.playerRfid !== scoringPlayerRfid) {
               // Hits are not by the scoring player, so these are scored as 1 point
               scoringPlayerLocationInfo.score += action.count;
+              action.count = action.count * 2;
             } else {
               // Hits are by the scoring player so, these are scored as more points
+              action.count = action.count * 4;
               scoringPlayerLocationInfo.score += action.count * 3;
             }
             scoringPlayerLocationInfo.score += action.count;
