@@ -207,8 +207,8 @@ export default [
               action.count = action.count * 2;
             } else {
               // Hits are by the scoring player so, these are scored as more points
-              action.count = action.count * 4;
               scoringPlayerLocationInfo.score += action.count * 3;
+              action.count = action.count * 4;
             }
             scoringPlayerLocationInfo.score += action.count;
           } else {
