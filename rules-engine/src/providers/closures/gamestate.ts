@@ -201,16 +201,18 @@ export default [
           if (action?.type === 'hits') {
             // 5. If the action type is "hits" while looping then add action.count to the scoring players score from
             // Score based on scoring-player hit vs non-scoring-player hits
+            let actionCount = action.count;
             if (action?.playerRfid !== scoringPlayerRfid) {
               // Hits are not by the scoring player, so these are scored as 1 point
               scoringPlayerLocationInfo.score += action.count;
-              action.count = action.count * 2;
+              actionCount = actionCount * 2;
             } else {
               // Hits are by the scoring player so, these are scored as more points
               scoringPlayerLocationInfo.score += action.count * 3;
-              action.count = action.count * 4;
+              actionCount = actionCount * 4;
             }
             scoringPlayerLocationInfo.score += action.count;
+            action.count = actionCount;
           } else {
             context.logger.error(`Unknown action type: ${action?.type}`);
           }
